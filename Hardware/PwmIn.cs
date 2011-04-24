@@ -3,7 +3,7 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.FEZ;
 
-namespace Technobotts.Robotics
+namespace Technobotts.Hardware
 {
 	class PwmIn : IDisposable
 	{

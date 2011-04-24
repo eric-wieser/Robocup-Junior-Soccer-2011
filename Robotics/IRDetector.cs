@@ -2,6 +2,7 @@ using System;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.FEZ;
+using Technobotts.Hardware;
 
 namespace Technobotts.Robotics
 {

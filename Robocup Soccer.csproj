@@ -44,6 +44,9 @@
     </Compile>
     <Compile Include="Robotics\DCMotor.cs" />
     <Compile Include="Robotics\IMotor.cs" />
+    <Compile Include="Robotics\IIntensityDetector.cs" />
+    <Compile Include="Robotics\IRDetector.cs" />
+    <Compile Include="Robotics\PwmIn.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -51,6 +54,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="GHIElectronics.NETMF.Hardware, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GHIElectronics.NETMF.IO, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GHIElectronics.NETMF.System, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SPOT.Graphics" />
     <Reference Include="Microsoft.SPOT.Hardware" />
     <Reference Include="Microsoft.SPOT.Native">
