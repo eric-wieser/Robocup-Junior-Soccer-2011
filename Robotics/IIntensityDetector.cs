@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Technobotts.Robotics
 {
-	interface IIntensityDetector
+	public interface IIntensityDetector
 	{
 		double Intensity { get; }
 	}

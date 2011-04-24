@@ -11,7 +11,7 @@ namespace Technobotts.Geometry
 		public readonly double X;
 		public readonly double Y;
 
-		public Vector(double x, double y)
+		public Vector(double x = 0, double y = 0)
 		{
 			X = x;
 			Y = y;
@@ -61,12 +61,10 @@ namespace Technobotts.Geometry
 		{
 			return X * that.X + Y * that.Y;
 		}
-		/*
-			public static Vector FromPolarCoords(double r, double theta)
-			{
-				return new Vector(r * MathEx.Sin(theta), r * MathEx.Cos(theta));
-			}*/
-
+		public static Vector FromPolarCoords(double r, double theta)
+		{
+			return new Vector(r * MathEx.Sin(theta), r * MathEx.Cos(theta));
+		}
 		public static implicit operator Vector(double k)
 		{
 			return new Vector(k, k);
@@ -78,7 +76,7 @@ namespace Technobotts.Geometry
 			return v.length();
 		}
 
-		public string ToString()
+		public override string ToString()
 		{
 			return "(" + X + ", " + Y + ")";
 		}

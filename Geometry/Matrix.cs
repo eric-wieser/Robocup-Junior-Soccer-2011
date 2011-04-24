@@ -102,7 +102,7 @@ namespace Technobotts.Geometry
 			return "Matrix: [[" + _a + "," + _b + "],[" + _c + "," + _d + "]]";
 		}
 
-		public bool Equals(Object obj)
+		public override bool Equals(Object obj)
 		{
 			Matrix that = obj as Matrix;
 			return that != null && _a == that._a && _b == that._b && _c == that._c && _d == that._d;

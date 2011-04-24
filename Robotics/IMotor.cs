@@ -9,7 +9,7 @@ namespace Technobotts.Robotics
 	}
 	public interface IMotor
 	{
-		public double Speed { get; set; }
-		public NeutralMode NeutralMode { get; set; }
+		double Speed { get; set; }
+		NeutralMode NeutralMode { get; set; }
 	}
 }

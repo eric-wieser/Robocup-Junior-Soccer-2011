@@ -15,6 +15,5 @@ namespace Technobotts.Robotics
 				return 1 - DutyCycle;
 			}
 		}
-}
 	}
 }

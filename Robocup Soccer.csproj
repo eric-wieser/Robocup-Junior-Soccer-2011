@@ -45,8 +45,9 @@
     <Compile Include="Robotics\DCMotor.cs" />
     <Compile Include="Robotics\IMotor.cs" />
     <Compile Include="Robotics\IIntensityDetector.cs" />
+    <Compile Include="Robotics\IntensityDetectorArray.cs" />
     <Compile Include="Robotics\IRDetector.cs" />
-    <Compile Include="Robotics\PwmIn.cs" />
+    <Compile Include="Hardware\PwmIn.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL">
