@@ -18,6 +18,7 @@ namespace Technobotts.Robotics
 			public Vector Orientation;
 			public Vector Intensity { get { return Detector.Intensity * Orientation; } }
 		}
+
 		public IntensityDetectorArray() { }
 
 		public IntensityDetectorArray(OrientedIntensityDetector[] sensors)

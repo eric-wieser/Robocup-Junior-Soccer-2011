@@ -1,6 +1,6 @@
 using System;
 using Microsoft.SPOT;
-//using GHIElectronics.NETMF.System;
+using GHIElectronics.NETMF.System;
 
 namespace Technobotts.Geometry
 {
@@ -20,20 +20,36 @@ namespace Technobotts.Geometry
 		private double _a, _b, _c, _d;
 		private Matrix _inverseMatrix = null; //Store for cheap future usage
 
-		/*
-		public static Matrix fromRotation(double angle)
+		public static Matrix FromRotation(double angle)
 		{
 			double sinA = MathEx.Sin(angle);
 			double cosA = MathEx.Cos(angle);
 			return new Matrix(cosA, sinA, -sinA, cosA);
-		}*/
+		}
+		/**
+		 * Construct a square 2x2 Matrix representing the transformation onto a new
+		 * pair of coordinate axes
+		 */
+		public static Matrix FromCoordinateAxes(Vector yAxis, Vector xAxis)
+		{
+			return new Matrix(
+				xAxis.X, yAxis.X,
+				xAxis.Y, yAxis.Y);
+		}
+		public static Matrix FromPrincipleAxis(Vector axis)
+		{
+			return new Matrix(
+				axis.Y, axis.X,
+				-axis.X, axis.Y);
+		}
 
-		///Construct a square 2x2 Matrix of the form
+		///<summary>Construct a square 2x2 Matrix of the form
 		///
-		///<pre>
-		///[ a b ]
-		///[ c d ]
-		///</pre>
+		///<code>
+		///[ <paramref name="a"/> <paramref name="b"/> ]
+		///[ <paramref name="c"/> <paramref name="d"/> ]
+		///</code>
+		///</summary>
 		public Matrix(double a, double b, double c, double d)
 		{
 			this._a = a;
@@ -42,14 +58,6 @@ namespace Technobotts.Geometry
 			this._d = d;
 		}
 
-		/**
-		 * Construct a square 2x2 Matrix representing the transformation onto a new
-		 * pair of coordinate axes
-		 */
-		public Matrix(Vector xAxis, Vector yAxis)
-			: this(xAxis.X, yAxis.X, xAxis.Y, yAxis.Y)
-		{
-		}
 
 		public Double Determinant
 		{
@@ -95,6 +103,13 @@ namespace Technobotts.Geometry
 			return new Matrix(
 				k, 0,
 				0, k);
+		}
+		
+		public static explicit operator Matrix(Vector v)
+		{
+			return new Matrix(
+				v.X, 0,
+				0, v.Y);
 		}
 
 		public string toString()

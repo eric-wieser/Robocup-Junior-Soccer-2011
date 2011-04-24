@@ -3,7 +3,7 @@ using Technobotts.Geometry;
 
 namespace Technobotts.Robotics
 {
-	class RadialIntensityDetectorArray<T> : IntensityDetectorArray<T>
+	class RadialIntensityDetectorArray<T> : IntensityDetectorArray<T> where T : IIntensityDetector
 	{
 		public RadialIntensityDetectorArray(T[] sensors)
 		{

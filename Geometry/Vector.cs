@@ -1,5 +1,6 @@
 using System;
-//using GHIElectronics.NETMF.System;
+using GHIElectronics.NETMF.System;
+
 namespace Technobotts.Geometry
 {
 	public class Vector
@@ -49,7 +50,7 @@ namespace Technobotts.Geometry
 
 		public double length()
 		{
-			return 0;// MathEx.Sqrt(X * X + Y * Y);
+			return MathEx.Sqrt(X * X + Y * Y);
 		}
 
 		public Vector unit()
@@ -70,7 +71,6 @@ namespace Technobotts.Geometry
 			return new Vector(k, k);
 		}
 
-
 		public static explicit operator double(Vector v)
 		{
 			return v.length();
@@ -79,6 +79,12 @@ namespace Technobotts.Geometry
 		public override string ToString()
 		{
 			return "(" + X + ", " + Y + ")";
+		}
+
+		public override bool Equals(Object obj)
+		{
+			Vector that = obj as Vector;
+			return that != null && X == that.X && Y == that.Y;
 		}
 	}
 }
