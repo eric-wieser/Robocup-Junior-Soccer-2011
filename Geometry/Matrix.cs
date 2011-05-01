@@ -122,5 +122,14 @@ namespace Technobotts.Geometry
 			Matrix that = obj as Matrix;
 			return that != null && _a == that._a && _b == that._b && _c == that._c && _d == that._d;
 		}
+
+		public override int GetHashCode()
+		{
+			return
+				_a.GetHashCode() << 24 +
+				_b.GetHashCode() << 16 +
+				_c.GetHashCode() << 8 +
+				_d.GetHashCode();
+		}
 	}
 }

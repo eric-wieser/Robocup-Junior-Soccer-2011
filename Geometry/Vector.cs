@@ -86,5 +86,10 @@ namespace Technobotts.Geometry
 			Vector that = obj as Vector;
 			return that != null && X == that.X && Y == that.Y;
 		}
+
+		public override int GetHashCode()
+		{
+			return X.GetHashCode() << 16 + Y.GetHashCode();
+		}
 	}
 }
