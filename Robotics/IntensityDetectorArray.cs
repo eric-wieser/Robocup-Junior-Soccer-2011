@@ -4,17 +4,17 @@ using Technobotts.Geometry;
 
 namespace Technobotts.Robotics
 {
-	public class IntensityDetectorArray<T> where T : IIntensityDetector
+	public class IntensityDetectorArray
 	{
 		public class OrientedIntensityDetector
 		{
-			public OrientedIntensityDetector(T detector, Vector orientation)
+			public OrientedIntensityDetector(IIntensityDetector detector, Vector orientation)
 			{
 				Detector = detector;
 				Orientation = orientation;
 			}
 
-			public T Detector;
+			public IIntensityDetector Detector;
 			public Vector Orientation;
 			public Vector Intensity { get { return Detector.Intensity * Orientation; } }
 		}

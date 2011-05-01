@@ -42,8 +42,6 @@ namespace Technobotts.Robotics.Navigation
 
 		Wheel[] Wheels;
 
-		double speed = 1;
-
 		public HolonomicDrive(Wheel[] wheels)
 		{
 			Wheels = wheels;

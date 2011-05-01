@@ -3,9 +3,9 @@ using Technobotts.Geometry;
 
 namespace Technobotts.Robotics
 {
-	class RadialIntensityDetectorArray<T> : IntensityDetectorArray<T> where T : IIntensityDetector
+	class RadialIntensityDetectorArray : IntensityDetectorArray
 	{
-		public RadialIntensityDetectorArray(T[] sensors)
+		public RadialIntensityDetectorArray(IIntensityDetector[] sensors)
 		{
 			double count = sensors.Length;
 			double angle = Math.PI * 2 / sensors.Length;
