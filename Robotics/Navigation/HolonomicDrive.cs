@@ -47,25 +47,25 @@ namespace Technobotts.Robotics.Navigation
 			Wheels = wheels;
 		}
 
-		Vector driveVelocity = new Vector(0, 0);
-		double turnVelocity;
-
-		public void setDriveVelocity(Vector driveVelocity)
+		private Vector _driveVelocity;
+		public Vector DriveVelocity
 		{
-			this.driveVelocity = driveVelocity;
-			update();
+			get { return _driveVelocity; }
+			set { _driveVelocity = value; update(); }
 		}
 
-		public void setTurnVelocity(double turnVelocity)
+		private double _turnVelocity;
+		public double TurnVelocity
 		{
-			this.turnVelocity = turnVelocity;
-			update();
+			get { return _turnVelocity; }
+			set { _turnVelocity = value; update(); }
 		}
+
 
 		public void set(Vector driveVelocity, double turnVelocity)
 		{
-			this.driveVelocity = driveVelocity;
-			this.turnVelocity = turnVelocity;
+			_driveVelocity = driveVelocity;
+			_turnVelocity = turnVelocity;
 			update();
 		}
 
@@ -73,8 +73,8 @@ namespace Technobotts.Robotics.Navigation
 		{
 			foreach (Wheel wheel in Wheels)
 			{
-				wheel.TargetVector = driveVelocity +
-					Matrix.Rotate90 * wheel.position * turnVelocity;
+				wheel.TargetVector = DriveVelocity +
+					Matrix.Rotate90 * wheel.position * TurnVelocity;
 			}
 
 			normalize();
@@ -102,11 +102,6 @@ namespace Technobotts.Robotics.Navigation
 			if (scale || maxInputSpeed > Wheel.MaxSpeed)
 				foreach (Wheel wheel in Wheels)
 					wheel.TargetSpeed *= speedRatio;
-		}
-
-		public void pidWrite(double output)
-		{
-			setTurnVelocity(output);
 		}
 
 	}

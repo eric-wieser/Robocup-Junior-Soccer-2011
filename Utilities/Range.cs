@@ -19,11 +19,8 @@ namespace Technobotts.Utilities
 			Max = max;
 		}
 
-		public Range(double tolerance)
-		{
-			Min = -tolerance;
-			Max = tolerance;
-		}
+		public Range(double tolerance) : this(-tolerance, tolerance) { }
+		public Range() : this(Double.NegativeInfinity, Double.PositiveInfinity) { }
 
 
 		public bool Contains(double d, bool inclusive = true)
@@ -34,6 +31,7 @@ namespace Technobotts.Utilities
 				return d > Min && d < Max;
 
 		}
+
 		public double Clip(double d)
 		{
 			if (d < Min)
@@ -45,12 +43,13 @@ namespace Technobotts.Utilities
 
 		public double Wrap(double d)
 		{
-			while(d >= Max)
+			while (d >= Max)
 				d -= Span;
-			while(d < Min)
+			while (d < Min)
 				d += Span;
 			return d;
 		}
+
 		public bool IsFinite()
 		{
 			return Min != Double.NegativeInfinity && Max != Double.PositiveInfinity;
