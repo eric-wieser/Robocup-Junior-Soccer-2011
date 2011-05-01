@@ -12,14 +12,12 @@ namespace Technobotts.Utilities
 
 		public interface IInput
 		{
-			double MaxValue { get; }
-			double MinValue { get; }
+			Range Range { get; }
 			double Value { get; }
 		}
 		public interface IOutput
 		{
-			double MaxValue { get; }
-			double MinValue { get; }
+			Range Range { get; }
 			double Value { set; }
 		}
 
@@ -59,14 +57,9 @@ namespace Technobotts.Utilities
 			get { return _setPoint; }
 			set
 			{
-				if (Input != null && Input.MaxValue > Input.MinValue)
+				if (Input != null)
 				{
-					if (value > Input.MaxValue)
-						_setPoint = Input.MaxValue;
-					else if (value < Input.MinValue)
-						_setPoint = Input.MinValue;
-					else
-						_setPoint = value;
+					_setPoint = Input.Range.Clip(value);
 				}
 				else
 					_setPoint = value;
@@ -74,7 +67,13 @@ namespace Technobotts.Utilities
 		}
 
 		public bool Continuous { get; set; }
-		public double Tolerance { get; set; }
+		private Range _tolerance;
+		public double Tolerance {
+			get { return _tolerance.Max; }
+			set { _tolerance = new Range(value / 100); }
+		}
+
+		private bool _enabled = false;
 		public bool Enabled
 		{
 			get { return _enabled; }
@@ -87,12 +86,9 @@ namespace Technobotts.Utilities
 			}
 		}
 
-		private bool _enabled = false;
 		public double Error { get; private set; }
 		public double PrevError { get; private set; }
 		public double TotalError { get; private set; }
-
-		private double _result = 0.0;
 		Timer _controlLoop;
 
 		///<summary>Allocate a PID object with the given constants for P, I, D</summary>
@@ -138,17 +134,17 @@ namespace Technobotts.Utilities
 					double error = SetPoint - Input.Value;
 					if (Continuous)
 					{
-						double inputRange = Input.MaxValue - Input.MinValue;
+						double inputRange = Input.Range.Span;
 						while (error > inputRange / 2)
-							error = error - inputRange;
+							error -= inputRange;
 						while (error < -inputRange / 2)
-							error = error + inputRange;
+							error += inputRange;
 					}
 					Error = error;
 
 					//Handle integral part overflow
 					double newTotal = TotalError + Error;
-					if (newTotal * I < Output.MaxValue && newTotal * I > Output.MaxValue)
+					if (Output.Range.Contains(newTotal * I))
 						TotalError = newTotal;
 
 					//Calcate PID output
@@ -158,10 +154,7 @@ namespace Technobotts.Utilities
 						D * (Error - PrevError) / Period;
 
 					//Normalize to wihthin max and min output
-					if (_result > Output.MaxValue)
-						_result = Output.MaxValue;
-					else if (_result < Output.MinValue)
-						_result = Output.MinValue;
+					result = Output.Range.Clip(result);
 
 					PrevError = Error;
 				}
@@ -190,11 +183,11 @@ namespace Technobotts.Utilities
 		{
 			get
 			{
-				double acceptableError = Tolerance / 100 * (Input.MaxValue - Input.MinValue);
+				double acceptableError = Tolerance * Input.Range.Span;
 
 				lock (this)
 				{
-					return Error > -acceptableError && Error < acceptableError;
+					return _tolerance.Contains(Error / Input.Range.Span);
 				}
 			}
 		}

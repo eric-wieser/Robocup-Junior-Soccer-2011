@@ -51,6 +51,7 @@
     <Compile Include="Robotics\Navigation\HolonomicDrive.cs" />
     <Compile Include="Robotics\RadialIntensityDetectorArray.cs" />
     <Compile Include="Utilities\PIDController.cs" />
+    <Compile Include="Utilities\Range.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL">
