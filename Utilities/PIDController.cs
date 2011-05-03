@@ -29,25 +29,25 @@ namespace Technobotts.Utilities
 		private IOutput _output;
 		public IOutput Output {
 			get { return _output; }
+			
+			[MethodImpl(MethodImplOptions.Synchronized)]
 			private set {
-				lock (this)
-				{
-					_output = value;
-					Enabled = Enabled;
-				}
+				_output = value;
+				Enabled = Enabled;
+				SetPoint = SetPoint;
 			}
 		}
 		private IInput _input;
 		public IInput Input
 		{
 			get { return _input; }
+			
+			[MethodImpl(MethodImplOptions.Synchronized)]
 			private set
 			{
-				lock (this)
-				{
-					_input = value;
-					Enabled = Enabled;
-				}
+				_input = value;
+				Enabled = Enabled;
+				SetPoint = SetPoint;
 			}
 		}
 
@@ -77,13 +77,9 @@ namespace Technobotts.Utilities
 		public bool Enabled
 		{
 			get { return _enabled; }
-			set
-			{
-				lock (this)
-				{
-					_enabled = value && Output != null && Input != null;
-				}
-			}
+			
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			set { _enabled = value && Output != null && Input != null; }
 		}
 
 		public double Error { get; private set; }
@@ -168,15 +164,13 @@ namespace Technobotts.Utilities
 			PIDController pid = (PIDController)@object;
 			pid.calculate();
 		}
-
+		
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void SetPID(double p, double i, double d)
 		{
-			lock (this)
-			{
-				P = p;
-				I = i;
-				D = d;
-			}
+			P = p;
+			I = i;
+			D = d;
 		}
 
 		public bool OnTarget
@@ -184,24 +178,18 @@ namespace Technobotts.Utilities
 			get
 			{
 				double acceptableError = Tolerance * Input.Range.Span;
-
-				lock (this)
-				{
-					return _tolerance.Contains(Error / Input.Range.Span);
-				}
+				return _tolerance.Contains(Error / Input.Range.Span);
 			}
 		}
 
 		///<summary>Reset the previous error and the integral term, and disables the controller</summary>
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Reset()
 		{
-			lock (this)
-			{
-				Enabled = false;
-				Error = 0;
-				PrevError = 0;
-				TotalError = 0;
-			}
+			Enabled = false;
+			Error = 0;
+			PrevError = 0;
+			TotalError = 0;
 		}
 	}
 }
