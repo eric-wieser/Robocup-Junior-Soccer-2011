@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 
 using Microsoft.SPOT;
+using System.Runtime.CompilerServices;
 
 namespace Technobotts.Utilities
 {
