@@ -8,7 +8,7 @@ namespace Technobotts.Robotics
 {
 	class IRDetector : PwmIn, IIntensityDetector
 	{
-		public IRDetector(FEZ_Pin.Interrupt pin) : base(pin) { }
+		public IRDetector(Cpu.Pin pin) : base(pin) { }
 
 		public double Intensity {
 			get {
