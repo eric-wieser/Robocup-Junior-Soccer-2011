@@ -13,31 +13,30 @@ namespace Technobotts
 	{
 		public static void Main()
 		{
-			// Blink board LED
-			const uint period = 100;
-			double duty = 0.5;
+			PinCapture sensor = new PinCapture((Cpu.Pin)FEZ_Pin.Digital.Di0, Port.ResistorMode.Disabled);
+			InputPort button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.Di1, true, Port.ResistorMode.PullDown);
 
-			//OutputPort led = new OutputPort((Cpu.Pin)FEZ_Pin.Digital.LED, ledState);
-			PWM pwm = new PWM(PWM.Pin.PWM1);
-			PinCapture pwmReader = new PinCapture((Cpu.Pin)FEZ_Pin.Digital.Di20, Port.ResistorMode.Disabled); 
+			uint[] buffer = new uint[32];
+
 			while (true)
 			{
-				pwm.SetPulse(period, (uint) (duty*period));
-				uint[] data = new uint[16];
-				pwmReader.Read(false, data, 0, data.Length, 2000);
-
-				uint upTime = 0;
-				uint downTime = 0;
-
-				for (int i = 0; i < data.Length; i += 2)
+				int count = sensor.Read(true, buffer, 0, buffer.Length, 500);
+				double period = 0;
+				double highTime = 0;
+				double duty = 0;
+				for (int i = 1; i < count; i += 2)
 				{
-					upTime += data[i];
-					downTime += data[i + 1];
+					period += buffer[i - 1] + buffer[i];
+					highTime += buffer[i - 1];
 				}
-
-				double inDuty = (double) upTime / (upTime + downTime);
-				Debug.Print("Intended duty: " + duty + ", actual duty: " + inDuty);
-				Thread.Sleep(1000);
+				if (count != 0)
+				{
+					period = period * 2 / count;
+					highTime = highTime * 2 / count;
+					duty = highTime / period;
+				}
+				Debug.Print("High: " + highTime + ",\tPeriod: " + period + ",\tDuty: " + duty);
+				Thread.Sleep(10);
 			}
 		}
 
