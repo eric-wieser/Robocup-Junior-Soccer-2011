@@ -11,7 +11,6 @@ namespace Technobotts.Hardware
 	{
 		PinCapture _in;
 		DateTime _lastRise = DateTime.Now;
-
 		public long Period { get; private set; }
 		public long PulseWidth { get; private set; }
 		public double DutyCycle { get; private set; }
@@ -22,7 +21,7 @@ namespace Technobotts.Hardware
 		public PwmIn(Cpu.Pin pin, double updatePeriod = 0.05)
 		{
 			_in = new PinCapture(pin, Port.ResistorMode.PullDown);
-			_period = (int)(updatePeriod / 1000);
+			_period = (int)(updatePeriod * 1000);
 			_controlLoop = new Timer((state) => ((PwmIn)state).recalculate(), this, 0, _period);
 		}
 
@@ -49,24 +48,7 @@ namespace Technobotts.Hardware
 				}
 				Period = (totalA + totalB)*2 / i;
 				PulseWidth = (state ? totalA : totalB)*2 / i;
-				DutyCycle = PulseWidth / Period;
-			}
-		}
-
-		void sensorInterrupt(uint port, uint state, DateTime time)
-		{
-			const long ticksPerMicrosecond = TimeSpan.TicksPerMillisecond / 1000;
-
-			long timeSpan = (time - _lastRise).Ticks / ticksPerMicrosecond;
-
-			if(state == 1) //Rising Edge
-			{
-				Period = timeSpan;
-				_lastRise = time;
-			}
-			else if (state == 0) //Falling Edge
-			{
-				PulseWidth = timeSpan;
+				DutyCycle = (double) PulseWidth / Period;
 			}
 		}
 

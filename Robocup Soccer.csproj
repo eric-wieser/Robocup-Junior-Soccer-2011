@@ -52,6 +52,7 @@
     <Compile Include="Robotics\RadialIntensityDetectorArray.cs" />
     <Compile Include="Robotics\AngleFinder.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
+    <Compile Include="Robotics\UltrasonicSensor.cs" />
     <Compile Include="Soccer\Robot.cs" />
     <Compile Include="Utilities\PIDController.cs" />
     <Compile Include="Utilities\Range.cs" />

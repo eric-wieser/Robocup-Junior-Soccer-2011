@@ -6,6 +6,8 @@ using Microsoft.SPOT.Hardware;
 
 using GHIElectronics.NETMF.FEZ;
 using GHIElectronics.NETMF.Hardware;
+using Technobotts.Robotics;
+using Technobotts.Hardware;
 
 namespace Technobotts
 {
@@ -13,31 +15,23 @@ namespace Technobotts
 	{
 		public static void Main()
 		{
-			PinCapture sensor = new PinCapture((Cpu.Pin)FEZ_Pin.Digital.Di0, Port.ResistorMode.Disabled);
-			InputPort button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.Di1, true, Port.ResistorMode.PullDown);
-
-			uint[] buffer = new uint[32];
-
+			IRDetector sensor = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di0);
+			IRDetector sensorShielded = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di1);
+				/*
+			UltrasonicSensor us = new UltrasonicSensor((Cpu.Pin) FEZ_Pin.Digital.Di0);
 			while (true)
 			{
-				int count = sensor.Read(true, buffer, 0, buffer.Length, 500);
-				double period = 0;
-				double highTime = 0;
-				double duty = 0;
-				for (int i = 1; i < count; i += 2)
-				{
-					period += buffer[i - 1] + buffer[i];
-					highTime += buffer[i - 1];
-				}
-				if (count != 0)
-				{
-					period = period * 2 / count;
-					highTime = highTime * 2 / count;
-					duty = highTime / period;
-				}
-				Debug.Print("High: " + highTime + ",\tPeriod: " + period + ",\tDuty: " + duty);
-				Thread.Sleep(10);
+				Debug.Print("Distance: "+us.GetDistance());
+				Thread.Sleep(200);
+			}*/
+			Debug.Print("T"+System.Double.PositiveInfinity / System.Double.PositiveInfinity);
+			while (true)
+			{
+				long p1 = sensor.Distance;
+				long p2 = sensorShielded.Distance; ;
+				Debug.Print("Shielded: "+p1+"\tNon-shielded: " + p2);
 			}
+
 		}
 
 	}
