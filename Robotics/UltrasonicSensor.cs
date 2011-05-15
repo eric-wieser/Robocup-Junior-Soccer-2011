@@ -1,9 +1,7 @@
 using System;
+using System.Threading;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
-using System.Threading;
-using SecretLabs.NETMF.Hardware;
-using SecretLabs.NETMF.Hardware.Netduino;
 
 namespace Technobotts.Robotics
 {
@@ -18,18 +16,19 @@ namespace Technobotts.Robotics
         yard
     }
 
-    public class Ping
+    public class UltrasonicSensor
     {
         TristatePort _port;
 
         const double _soundSpeed = 331.3;
-		const double _soundSpeedPerDegrees = 0.606;
+		const double _soundSpeedPerDegree = 0.606;
 		double _metresPerTick;
- 
-        public Ping(Cpu.Pin pin)
+
+		public UltrasonicSensor(Cpu.Pin pin)
         {
-			Unit = DistanceUnits.mm
-            _port = new TristatePort(pin, false, false, ResistorModes.Disabled);
+			Unit = DistanceUnits.m;
+			OperatingTemperature = 20;
+            _port = new TristatePort(pin, false, false, Port.ResistorMode.Disabled);
         }
 
         /// <summary>
@@ -59,13 +58,15 @@ namespace Technobotts.Robotics
             while (_port.Read()); 
             t2 = System.DateTime.Now.Ticks;
 
-            return Convert((t2 - t1) * _metresPerTick, Unit);
+			long deltaT = t2 - t1;
+
+			return Convert(deltaT / 2 * _metresPerTick, Unit);
         }
 
         /// <summary>
         /// Convert the millimeters into other units.
         /// </summary>
-        /// <param name="millimeters">The Ping))) sensor's mm reading.</param>
+        /// <param name="metres">The Ping))) sensor's m reading.</param>
         /// <param name="outputUnit">The desired output unit.</param>
         public double Convert(double metres, DistanceUnits outputUnit)
         {
@@ -83,13 +84,13 @@ namespace Technobotts.Robotics
                     result = metres * 10F;
                     break;
                 case DistanceUnits.inch:
-                    result = meters * 39.3700787;
+					result = metres * 39.3700787;
                     break;
                 case DistanceUnits.feet:
-                    result = meters * 3.2808399;
+					result = metres * 3.2808399;
                     break;
                 case DistanceUnits.yard:
-                    result = meters * 1.0936133;
+					result = metres * 1.0936133;
                     break;
             }
 
@@ -98,12 +99,12 @@ namespace Technobotts.Robotics
 
         public DistanceUnits Unit { get; set; }
 		
-		private double _operatingTemperature = 20;
+		private double _operatingTemperature = 0;
 		public double OperatingTemperature {
 			set {
 				_operatingTemperature = value;
 				double speed = _soundSpeed + _soundSpeedPerDegree * _operatingTemperature;
-				_distancePerTick = speed / TimeSpan.TicksPerSecond;
+				_metresPerTick = speed / TimeSpan.TicksPerSecond;
 			}
 			get {
 				return _operatingTemperature;
