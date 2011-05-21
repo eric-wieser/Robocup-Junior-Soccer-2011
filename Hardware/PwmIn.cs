@@ -4,6 +4,7 @@ using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.FEZ;
 using GHIElectronics.NETMF.Hardware;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace Technobotts.Hardware
 {
@@ -11,21 +12,39 @@ namespace Technobotts.Hardware
 	{
 		PinCapture _in;
 		DateTime _lastRise = DateTime.Now;
-		public long Period { get; private set; }
-		public long PulseWidth { get; private set; }
-		public double DutyCycle { get; private set; }
+		public long Period {
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get;
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			private set;
+		}
+		public long PulseWidth
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get;
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			private set;
+		}
+		public double DutyCycle
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get;
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			private set;
+		}
 
 		Timer _controlLoop;
 		int _period;
 
-		public PwmIn(Cpu.Pin pin, double updatePeriod = 0.05)
+		public PwmIn(Cpu.Pin pin, double updatePeriod = 0.1)
 		{
 			_in = new PinCapture(pin, Port.ResistorMode.PullDown);
 			_period = (int)(updatePeriod * 1000);
-			_controlLoop = new Timer((state) => ((PwmIn)state).recalculate(), this, 0, _period);
+			_controlLoop = new Timer( (state) => ((PwmIn)state).recalculate(), this, 0, _period);
 		}
 
 		uint[] buffer = new uint[8];
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		void recalculate()
 		{
 			bool state;
@@ -35,6 +54,7 @@ namespace Technobotts.Hardware
 				Period = 0;
 				PulseWidth = 0;
 				DutyCycle = state ? 1 : 0;
+				Debug.Print("No signal!");
 			}
 			else
 			{

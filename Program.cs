@@ -27,9 +27,12 @@ namespace Technobotts
 			Debug.Print("T"+System.Double.PositiveInfinity / System.Double.PositiveInfinity);
 			while (true)
 			{
-				long p1 = sensor.Distance;
+				long distance = sensor.Distance;
+				long period = 0;// sensor.ActualPeriod;
+				long highTime = 0;//sensor.PulseWidth;
 				long p2 = sensorShielded.Distance; ;
-				Debug.Print("Shielded: "+p1+"\tNon-shielded: " + p2);
+				Debug.Print("Shielded: " + distance + ", " + period + ", " + highTime);
+				Thread.Sleep(50);
 			}
 
 		}
