@@ -24,7 +24,7 @@ namespace Technobotts.Hardware
 		};
 
 		private static I2CTransaction[] _stopCalibration = new I2CTransaction[] {
-			CreateWriteTransaction(new byte[] {CommandRegister, CalibrateMode})
+			CreateWriteTransaction(new byte[] {CommandRegister, MeasurementMode})
 		};
 
 		public HiTechnicCompassSensor(ushort address = DefaultAddress) :
