@@ -29,12 +29,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Program</StartupObject>
+    <StartupObject>Technobotts.LaserTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="LaserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources.Designer.cs">
