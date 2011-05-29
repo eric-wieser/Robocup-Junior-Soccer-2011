@@ -36,20 +36,23 @@ namespace Technobotts.Hardware
 		Timer _controlLoop;
 		int _period;
 
-		public PwmIn(Cpu.Pin pin, double updatePeriod = 0.1)
+		public PwmIn(Cpu.Pin pin, double updatePeriod) : this(pin, (int) (updatePeriod * 1000))
+		{ }
+
+		public PwmIn(Cpu.Pin pin, int updatePeriod = 100)
 		{
-			_in = new PinCapture(pin, Port.ResistorMode.PullDown);
-			_period = (int)(updatePeriod * 1000);
-			_controlLoop = new Timer( (state) => ((PwmIn)state).recalculate(), this, 0, _period);
+			_in = new PinCapture(pin, Port.ResistorMode.PullUp);
+			_period = updatePeriod;
+			_controlLoop = new Timer(Recalculate, this, 0, _period);
 		}
 
 		uint[] buffer = new uint[8];
 		[MethodImpl(MethodImplOptions.Synchronized)]
-		void recalculate()
+		void Recalculate(object o)
 		{
 			bool state;
 			int count = _in.Read(out state, buffer, 0, buffer.Length, _period);
-			if (count < 2)
+			if (count < 4)
 			{
 				Period = 0;
 				PulseWidth = 0;
@@ -61,13 +64,15 @@ namespace Technobotts.Hardware
 				long totalA = 0;
 				long totalB = 0;
 				int i;
-				for (i = 0; i + 1 < count; i += 2)
+				count /= 2;
+				for (i = 0; i < count; i ++)
 				{
-					totalA += buffer[i];
-					totalB += buffer[i + 1];
+					totalA += buffer[2*i];
+					totalB += buffer[2*i + 1];
 				}
-				Period = (totalA + totalB)*2 / i;
-				PulseWidth = (state ? totalA : totalB)*2 / i;
+				
+				Period = (totalA + totalB) / count;
+				PulseWidth = (state ? totalA : totalB) / count;
 				DutyCycle = (double) PulseWidth / Period;
 			}
 		}

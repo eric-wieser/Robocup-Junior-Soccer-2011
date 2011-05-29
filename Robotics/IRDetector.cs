@@ -9,19 +9,33 @@ namespace Technobotts.Robotics
 {
 	class IRDetector : PwmIn
 	{
-		public IRDetector(Cpu.Pin pin) : base(pin) { }
+		public const int CarrierFrequency = 40; //kHz
 		new public int Period = 833;
-		private long[] signalStrength = { 500, 400, 300, 200, 0 };
-		public int Distance
+		public IRDetector(Cpu.Pin pin) : base(pin, 83) { }
+		private long[] signalStrength = {0, 200, 300, 400, 500};
+		public int Intensity
 		{
 			get
 			{
-				long pulseWidth = (long) (this.DutyCycle * Period);
-				//Debug.Print("t:"+pulseWidth);
-				for (int i = 1; i < signalStrength.Length; i++)
-					if (signalStrength[i - 1] >= pulseWidth && pulseWidth > signalStrength[i])
-						return i;
-				return signalStrength.Length;
+				const long shortPulse = 1000 / 40;
+
+				long pulseWidth = (long)(DutyCycle * Period);
+
+				//No pulses
+				if (pulseWidth < 4 * shortPulse)
+					return 0;
+				//Full power: 8 pulses
+				else if (pulseWidth < 10 * shortPulse)
+					return 1;
+				//Quarter power: 4 pulses
+				else if (pulseWidth < 14 * shortPulse)
+					return 2;
+				//Sixteenth power: 4 pulses
+				else if (pulseWidth < 18 * shortPulse)
+					return 3;
+				//64th power: 4 pulses
+				else
+					return 4;
 			}
 		}
 		public long ActualPeriod
