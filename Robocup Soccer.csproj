@@ -33,7 +33,7 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Double.cs" />
+    <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
