@@ -59,7 +59,7 @@ namespace Technobotts.Geometry
 		}
 
 
-		public Double Determinant
+		public double Determinant
 		{
 			get { return _a * _d - _b * _c; }
 		}

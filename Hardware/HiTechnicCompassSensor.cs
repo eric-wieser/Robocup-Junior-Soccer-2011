@@ -43,7 +43,7 @@ namespace Technobotts.Hardware
 					return data[0] | data[1] << 8;
 				}
 				else
-					return Double.NaN;
+					return DoubleEx.NaN;
 			}
 		}
 

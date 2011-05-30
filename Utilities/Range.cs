@@ -20,7 +20,7 @@ namespace Technobotts.Utilities
 		}
 
 		public Range(double tolerance) : this(-tolerance, tolerance) { }
-		public Range() : this(Double.NegativeInfinity, Double.PositiveInfinity) { }
+		public Range() : this(DoubleEx.NegativeInfinity, DoubleEx.PositiveInfinity) { }
 
 
 		public bool Contains(double d, bool inclusive = true)
@@ -52,7 +52,7 @@ namespace Technobotts.Utilities
 
 		public bool IsFinite()
 		{
-			return Min != Double.NegativeInfinity && Max != Double.PositiveInfinity;
+			return Min != DoubleEx.NegativeInfinity && Max != DoubleEx.PositiveInfinity;
 		}
 	}
 }
