@@ -19,7 +19,7 @@ namespace Technobotts.Robotics
 			{
 				const long shortPulse = 1000 / 40;
 
-				long pulseWidth = (long)(DutyCycle * Period);
+				long pulseWidth = (long)((1-DutyCycle) * Period);
 
 				//No pulses
 				if (pulseWidth < 4 * shortPulse)
