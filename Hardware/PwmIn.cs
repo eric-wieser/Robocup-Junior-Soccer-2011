@@ -32,32 +32,53 @@ namespace Technobotts.Hardware
 			[MethodImpl(MethodImplOptions.Synchronized)]
 			private set;
 		}
+		public int SampleTime { get; set; }
 
 		Timer _controlLoop;
-		int _period;
 
-		public PwmIn(Cpu.Pin pin, double updatePeriod) : this(pin, (int) (updatePeriod * 1000))
-		{ }
-
-		public PwmIn(Cpu.Pin pin, int updatePeriod = 100)
+		public PwmIn(Cpu.Pin pin, int sampleTime = 100)
 		{
+			SampleTime = sampleTime;
 			_in = new PinCapture(pin, Port.ResistorMode.PullUp);
-			_period = updatePeriod;
-			_controlLoop = new Timer(Recalculate, this, 0, _period);
+			_controlLoop = new Timer(Recalculate, null, Timeout.Infinite, Timeout.Infinite);
+		}
+
+		public void StartPolling()
+		{
+			StartPolling(SampleTime);
+		}
+
+		public void StartPolling(int periodMs)
+		{
+			_controlLoop.Change(0, periodMs);
+		}
+
+		public void StopPolling()
+		{
+			_controlLoop.Change(Timeout.Infinite, Timeout.Infinite);
 		}
 
 		uint[] buffer = new uint[8];
+		bool isSampling = false;
+
+		public void Recalculate()
+		{
+			Recalculate(null);
+		}
+
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		void Recalculate(object o)
 		{
+			if (isSampling) return;
+			isSampling = true;
+
 			bool state;
-			int count = _in.Read(out state, buffer, 0, buffer.Length, _period);
-			if (count < 4)
+			int count = _in.Read(out state, buffer, 0, buffer.Length, SampleTime);
+			if (count < 2)
 			{
 				Period = 0;
 				PulseWidth = 0;
 				DutyCycle = state ? 1 : 0;
-				Debug.Print("No signal!");
 			}
 			else
 			{
@@ -75,11 +96,14 @@ namespace Technobotts.Hardware
 				PulseWidth = (state ? totalA : totalB) / count;
 				DutyCycle = (double) PulseWidth / Period;
 			}
+
+			isSampling = false;
 		}
 
 		public void Dispose()
 		{
 			_in.Dispose();
+			_controlLoop.Dispose();
 		}
 	}
 }

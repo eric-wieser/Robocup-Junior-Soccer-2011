@@ -11,7 +11,7 @@ namespace Technobotts.Robotics
 	{
 		public const int CarrierFrequency = 40; //kHz
 		new public int Period = 833;
-		public IRDetector(Cpu.Pin pin) : base(pin, 83) { }
+		public IRDetector(Cpu.Pin pin) : base(pin, 2) { }
 		private long[] signalStrength = {0, 200, 300, 400, 500};
 		public int Intensity
 		{
