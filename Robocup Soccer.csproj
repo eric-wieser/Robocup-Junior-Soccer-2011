@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="LaserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

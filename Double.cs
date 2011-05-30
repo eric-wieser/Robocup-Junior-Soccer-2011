@@ -3,7 +3,7 @@ using Microsoft.SPOT;
 
 namespace Technobotts
 {
-	struct Double : System.Double
+	struct Double
 	{
 		public const double NaN = 0.0f / 0.0f;
 		public const double NegativeInfinity = -1.0f / 0.0f;
