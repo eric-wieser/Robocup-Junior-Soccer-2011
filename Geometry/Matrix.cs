@@ -64,14 +64,17 @@ namespace Technobotts.Geometry
 			get { return _a * _d - _b * _c; }
 		}
 
-		public Matrix Inverse()
+		public Matrix Inverse
 		{
-			if (_inverseMatrix == null)
+			get
 			{
-				_inverseMatrix = new Matrix(_d, -_b, -_c, _a) / Determinant;
-				_inverseMatrix._inverseMatrix = this;
+				if (_inverseMatrix == null)
+				{
+					_inverseMatrix = new Matrix(_d, -_b, -_c, _a) / Determinant;
+					_inverseMatrix._inverseMatrix = this;
+				}
+				return _inverseMatrix;
 			}
-			return _inverseMatrix;
 		}
 
 		public static Matrix operator /(Matrix m, double k)

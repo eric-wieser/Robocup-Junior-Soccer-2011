@@ -29,8 +29,8 @@ namespace Technobotts.Robotics.Navigation
 			{
 				set
 				{
-					Vector wheelVector = transformMatrix.Inverse() * value;
-					TargetSpeed = wheelVector.Y;
+					Vector wheelVector = transformMatrix.Inverse * value;
+					TargetSpeed = wheelVector.X;
 				}
 			}
 
@@ -73,8 +73,7 @@ namespace Technobotts.Robotics.Navigation
 		{
 			foreach (Wheel wheel in Wheels)
 			{
-				wheel.TargetVector = DriveVelocity +
-					Matrix.Rotate90 * wheel.position * TurnVelocity;
+				wheel.TargetVector = DriveVelocity + wheel.position.Perpendicular * TurnVelocity;
 			}
 
 			normalize();

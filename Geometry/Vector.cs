@@ -48,17 +48,22 @@ namespace Technobotts.Geometry
 			return new Vector(-v.X, -v.Y);
 		}
 
-		public double length()
+		public Vector Perpendicular
 		{
-			return MathEx.Sqrt(X * X + Y * Y);
+			get { return new Vector(-Y, X); }
 		}
 
-		public Vector unit()
+		public double Length
 		{
-			return this / this.length();
+			get { return MathEx.Sqrt(X * X + Y * Y); }
 		}
 
-		public double dot(Vector that)
+		public Vector Unit
+		{
+			get { return this / this.Length; }
+		}
+
+		public double Dot(Vector that)
 		{
 			return X * that.X + Y * that.Y;
 		}
@@ -73,7 +78,7 @@ namespace Technobotts.Geometry
 
 		public static explicit operator double(Vector v)
 		{
-			return v.length();
+			return v.Length;
 		}
 
 		public override string ToString()
