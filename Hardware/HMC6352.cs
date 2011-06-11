@@ -8,7 +8,7 @@ namespace Technobotts.Hardware
 	public class HMC6352 : I2CDevice
 	{
 		public const ushort DefaultAddress = 0x21;
-		public const int ClockSpeed = 100000;
+		public const int ClockSpeed = 100;
 
 		#region Enum constants
 			public enum Command
@@ -105,7 +105,9 @@ namespace Technobotts.Hardware
 
 		public HMC6352(ushort address = DefaultAddress) :
 			base(new Configuration(address, ClockSpeed))
-		{ }
+		{
+			OperationConfig = new OperationConfiguration();
+		}
 
 		#region Reading sensor output
 
@@ -152,11 +154,13 @@ namespace Technobotts.Hardware
 		{
 			get
 			{
+				double x, y;
+				OutputMode = OutputModeType.MagnetometerX;
+
+				Debug.Print("Mode: "+(OutputModeType) readRAM(RAMLocation.Output));
 				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Standby)
 					CalculateHeading();
 
-				double x, y;
-				OutputMode = OutputModeType.MagnetometerX;
 				x = getOutput();
 				OutputMode = OutputModeType.MagnetometerY;
 				y = getOutput();
@@ -192,25 +196,25 @@ namespace Technobotts.Hardware
 		};
 
 
-		private short getOutput()
+		protected short getOutput()
 		{
 			byte[] rx = outputTransaction[0].Buffer;
 			int transferred = Execute(outputTransaction, 500);
 			if (transferred != 0)
 				return (short)(rx[0] << 8 | rx[1]);
 			else
-				throw new ApplicationException("No response from I2C device");
+				throw new I2CException();
 		}
 
 		private I2CTransaction[] commandTransaction = new I2CTransaction[] {
-			CreateReadTransaction(new byte[1])
+			CreateWriteTransaction(new byte[1])
 		};
 
 		public void SendCommand(Command command)
 		{
 			commandTransaction[0].Buffer[0] = (byte)command;
 			int transferred = Execute(commandTransaction, 500);
-			if (transferred != 0)
+			if (transferred == 0)
 				throw new ApplicationException("No response from I2C device");
 		}
 		#endregion
@@ -285,29 +289,39 @@ namespace Technobotts.Hardware
 			{
 				readTransaction[0].Buffer[0] = (byte)Command.ReadEEPROM;
 				readTransaction[0].Buffer[1] = (byte)address;
-				Execute(readTransaction, 500);
-				return readTransaction[1].Buffer[0];
+
+				if (Execute(readTransaction, 500) == 0)
+					throw new I2CException();
+				else
+					return readTransaction[1].Buffer[0];
 			}
 			protected void writeEEPROM(EEPROMLocation address, byte value)
 			{
 				writeTransaction[0].Buffer[0] = (byte)Command.WriteEEPROM;
 				writeTransaction[0].Buffer[1] = (byte)address;
 				writeTransaction[0].Buffer[2] = (byte)value;
-				Execute(readTransaction, 500);
+
+				if (Execute(writeTransaction, 500) == 0)
+					throw new I2CException();
 			}
-			protected byte readRAM(RAMLocation address)
+			public byte readRAM(RAMLocation address)
 			{
 				readTransaction[0].Buffer[0] = (byte)Command.ReadRAM;
 				readTransaction[0].Buffer[1] = (byte)address;
-				Execute(readTransaction, 500);
-				return readTransaction[1].Buffer[0];
+
+				if (Execute(readTransaction, 500) == 0)
+					throw new I2CException();
+				else
+					return readTransaction[1].Buffer[0];
 			}
 			protected void writeRAM(RAMLocation address, byte value)
 			{
 				writeTransaction[0].Buffer[0] = (byte)Command.WriteRAM;
 				writeTransaction[0].Buffer[1] = (byte)address;
 				writeTransaction[0].Buffer[2] = (byte)value;
-				Execute(readTransaction, 500);
+
+				if (Execute(writeTransaction, 500) == 0)
+					throw new I2CException();
 			}
 		#endregion
 	}
