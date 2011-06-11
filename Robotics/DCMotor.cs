@@ -2,10 +2,11 @@ using System;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.Hardware;
+using GHIElectronics.NETMF.FEZ;
 
 namespace Technobotts.Robotics
 {
-	public class DCMotor : IMotor
+	public class DCMotor : IMotor, IDisposable
 	{
 		private PWM _pwm;
 		private OutputPort _dir1;
@@ -21,6 +22,13 @@ namespace Technobotts.Robotics
 			_dir1 = dir1;
 			_dir2 = dir2;
 		}
+		public DCMotor(PWM.Pin pwmPin, FEZ_Pin.Digital dirPin1, FEZ_Pin.Digital dirPin2)
+		{
+			_pwm = new PWM(pwmPin);
+			_dir1 = new OutputPort((Cpu.Pin)dirPin1, false);
+			_dir2 = new OutputPort((Cpu.Pin)dirPin2, false);
+		}
+
 
 		public NeutralMode NeutralMode { get; set; }
 
@@ -66,13 +74,21 @@ namespace Technobotts.Robotics
 
 		private void backward()
 		{
-			_dir1.Write(true);
-			_dir2.Write(false);
+			_dir1.Write(false);
+			_dir2.Write(true);
 		}
 
 		private void setPWM(double dutyCycle)
 		{
 			_pwm.Set(pwmFrequency, (byte) (dutyCycle * 100));
+		}
+
+		public void Dispose()
+		{
+			coast();
+			_pwm.Dispose();
+			_dir1.Dispose();
+			_dir2.Dispose();
 		}
 	}
 }
