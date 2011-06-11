@@ -22,6 +22,15 @@ namespace Technobotts.Robotics.Navigation
 
 				transformMatrix = Matrix.FromCoordinateAxes(driveAxis, rollAxis);
 			}
+			public Wheel(Vector position, Matrix transformMatrix, IMotor motor)
+			{
+				this.position = position;
+
+				this.motor = motor;
+
+				this.transformMatrix = transformMatrix;
+			}
+
 
 			public double TargetSpeed { get; set; }
 

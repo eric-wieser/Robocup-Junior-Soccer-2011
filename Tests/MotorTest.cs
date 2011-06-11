@@ -11,10 +11,11 @@ namespace Technobotts.Tests
 {
 	class MotorTest
 	{
-		public static InputPort button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
+		public static InputPort button;
 
 		public static void Main()
 		{
+			button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
 			double i = 0;
 			double step = System.Math.PI / 16;
 			using (DCMotor motor = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di20, FEZ_Pin.Digital.Di21))
