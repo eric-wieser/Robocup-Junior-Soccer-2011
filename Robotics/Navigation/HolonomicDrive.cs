@@ -51,7 +51,7 @@ namespace Technobotts.Robotics.Navigation
 
 		Wheel[] Wheels;
 
-		public HolonomicDrive(Wheel[] wheels)
+		public HolonomicDrive(params Wheel[] wheels)
 		{
 			Wheels = wheels;
 		}
@@ -105,12 +105,18 @@ namespace Technobotts.Robotics.Navigation
 					maxInputSpeed = -wheel.TargetSpeed;
 			}
 
-			double speedRatio = Wheel.MaxSpeed / maxInputSpeed;
 
-			if (scale || maxInputSpeed > Wheel.MaxSpeed)
+			if (maxInputSpeed != 0 && scale || maxInputSpeed > Wheel.MaxSpeed)
+			{
+				double speedRatio = Wheel.MaxSpeed / maxInputSpeed;
 				foreach (Wheel wheel in Wheels)
 					wheel.TargetSpeed *= speedRatio;
+			}
 		}
 
+		public void Stop()
+		{
+			DriveVelocity = Vector.Zero;
+		}
 	}
 }

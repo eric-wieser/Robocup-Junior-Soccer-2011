@@ -12,7 +12,7 @@ namespace Technobotts.Robotics
 		private OutputPort _dir1;
 		private OutputPort _dir2;
 
-		private const int pwmFrequency = 10000;
+		private const int pwmFrequency = 100;
 
 		private double _speed = 0;
 
@@ -80,7 +80,10 @@ namespace Technobotts.Robotics
 
 		private void setPWM(double dutyCycle)
 		{
-			_pwm.Set(pwmFrequency, (byte) (dutyCycle * 100));
+			if (dutyCycle == 1)
+				_pwm.Set(true);
+			else
+				_pwm.Set(pwmFrequency, (byte)(dutyCycle * 100));
 		}
 
 		public void Dispose()

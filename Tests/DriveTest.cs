@@ -7,16 +7,17 @@ using Technobotts.Robotics;
 using Technobotts.Robotics.Navigation;
 using GHIElectronics.NETMF.Hardware;
 using GHIElectronics.NETMF.FEZ;
-#if false
+using Technobotts.Soccer;
+
 namespace Technobotts.Tests
 {
 	class DriveTest
 	{
-		static IMotor motorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di20, FEZ_Pin.Digital.Di21);
-		static IMotor motorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di22, FEZ_Pin.Digital.Di23);
-		static IMotor motorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di24, FEZ_Pin.Digital.Di25);
+		//static IMotor motorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di20, FEZ_Pin.Digital.Di21);
+		//static IMotor motorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di22, FEZ_Pin.Digital.Di23);
+		//static IMotor motorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di24, FEZ_Pin.Digital.Di25);
 
-		static InputPort button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
+		static InputPort button;
 
 		/*
 		static HolonomicDrive drive = new HolonomicDrive(new {
@@ -35,19 +36,19 @@ namespace Technobotts.Tests
 
 		public static void Main()
 		{
+			Robot r = new Robot();
+			double angle = 0;
+			button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
+			r.Drive.Stop();
+			waitForButton();
 			while (true)
 			{
-				motorA.Speed = 0;
-				//motorB.Speed = 0;
-				//motorC.Speed = 0;
-				waitForButton();
-				motorA.Speed = 1;
-				//motorB.Speed = -0.5;
-				//motorC.Speed = 0.25;
-				waitForButton();
+				r.Drive.DriveVelocity = Vector.FromPolarCoords(1, angle);
+				angle += System.Math.PI / 4;
+				Thread.Sleep(750);
+
 			}
 		}
 
 	}
 }
-#endif
