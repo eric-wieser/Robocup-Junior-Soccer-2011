@@ -138,35 +138,19 @@ namespace Technobotts.Hardware
 		{
 			get
 			{
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Standby)
-					CalculateHeading();
-
 				OutputMode = OutputModeType.Heading;
-				int heading = getOutput();
 
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Query)
-					CalculateHeading();
-
-				return heading / 10.0;
+				return getOutput() / 10.0;
 			}
 		}
 		public Vector MagnetometerReading
 		{
 			get
 			{
-				double x, y;
 				OutputMode = OutputModeType.MagnetometerX;
-
-				Debug.Print("Mode: "+(OutputModeType) readRAM(RAMLocation.Output));
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Standby)
-					CalculateHeading();
-
-				x = getOutput();
+				double x = getOutput();
 				OutputMode = OutputModeType.MagnetometerY;
-				y = getOutput();
-
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Query)
-					CalculateHeading();
+				double y = getOutput();
 
 				return new Vector(x, y);
 			}
@@ -175,17 +159,10 @@ namespace Technobotts.Hardware
 		{
 			get
 			{
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Standby)
-					SendCommand(Command.CalculateHeading);
-
-				double x, y;
 				OutputMode = OutputModeType.RawMagnetometerX;
-				x = getOutput();
+				double x = getOutput();
 				OutputMode = OutputModeType.RawMagnetometerY;
-				y = getOutput();
-
-				if (OperationConfig.Mode == OperationConfiguration.OperationMode.Query)
-					SendCommand(Command.CalculateHeading);
+				double y = getOutput();
 
 				return new Vector(x, y);
 			}
@@ -198,8 +175,15 @@ namespace Technobotts.Hardware
 
 		protected short getOutput()
 		{
+			if (OperationConfig.Mode == OperationConfiguration.OperationMode.Standby)
+				SendCommand(Command.CalculateHeading);
+
 			byte[] rx = outputTransaction[0].Buffer;
 			int transferred = Execute(outputTransaction, 500);
+
+			if (OperationConfig.Mode == OperationConfiguration.OperationMode.Query)
+				SendCommand(Command.CalculateHeading);
+
 			if (transferred != 0)
 				return (short)(rx[0] << 8 | rx[1]);
 			else
@@ -215,7 +199,7 @@ namespace Technobotts.Hardware
 			commandTransaction[0].Buffer[0] = (byte)command;
 			int transferred = Execute(commandTransaction, 500);
 			if (transferred == 0)
-				throw new ApplicationException("No response from I2C device");
+				throw new I2CException();
 		}
 		#endregion
 
