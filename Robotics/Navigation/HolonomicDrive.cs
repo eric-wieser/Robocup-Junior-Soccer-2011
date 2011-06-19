@@ -15,18 +15,14 @@ namespace Technobotts.Robotics.Navigation
 			private IMotor motor;
 
 			public Wheel(Vector position, Vector driveAxis, Vector rollAxis, IMotor motor)
-			{
-				this.position = position;
+				: this(position,  Matrix.FromCoordinateAxes(driveAxis, rollAxis), motor) { }
 
-				this.motor = motor;
-
-				transformMatrix = Matrix.FromCoordinateAxes(driveAxis, rollAxis);
-			}
 			public Wheel(Vector position, Matrix transformMatrix, IMotor motor)
 			{
 				this.position = position;
 
 				this.motor = motor;
+				motor.NeutralMode = NeutralMode.Brake;
 
 				this.transformMatrix = transformMatrix;
 			}

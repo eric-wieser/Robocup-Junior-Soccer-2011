@@ -1,3 +1,5 @@
+//#define NoMotors
+
 using System;
 using Technobotts.Geometry;
 using Technobotts.Robotics.Navigation;
@@ -11,16 +13,25 @@ namespace Technobotts.Soccer
 	{
 		AngleFinder Compass;
 		IntensityDetectorArray BallDetector;
-		Solenoid Kicker;
 		IMotor MotorA;
 		IMotor MotorB;
 		IMotor MotorC;
+
 		public HolonomicDrive Drive;
+		public Solenoid Kicker;
+
 		public Robot()
 		{
-			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di20);
-			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di22);
-			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di25, FEZ_Pin.Digital.Di24);
+			#if NoMotors
+				MotorA = new FakeMotor{Name = "A"};
+				MotorB = new FakeMotor{Name = "B"};
+				MotorC = new FakeMotor{Name = "C"};
+			#else
+				MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di20);
+				MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di22);
+				MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di25, FEZ_Pin.Digital.Di24);
+			#endif
+
 			Drive = new HolonomicDrive(
 				new HolonomicDrive.Wheel(
 					Vector.FromPolarCoords(95, - Math.PI * 2 / 3),
@@ -38,6 +49,8 @@ namespace Technobotts.Soccer
 					MotorC
 				)
 			);
+
+			Kicker = new Solenoid(PWM.Pin.PWM5);
 		}
 	}
 }

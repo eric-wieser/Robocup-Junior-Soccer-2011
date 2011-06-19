@@ -48,6 +48,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Robotics\DCMotor.cs" />
+    <Compile Include="Robotics\FakeMotor.cs" />
     <Compile Include="Robotics\IMotor.cs" />
     <Compile Include="Robotics\IIntensityDetector.cs" />
     <Compile Include="Robotics\IntensityDetectorArray.cs" />

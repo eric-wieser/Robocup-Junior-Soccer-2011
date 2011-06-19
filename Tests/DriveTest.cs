@@ -37,16 +37,21 @@ namespace Technobotts.Tests
 		public static void Main()
 		{
 			Robot r = new Robot();
-			double angle = 0;
+			int angle = 0;
 			button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
 			r.Drive.Stop();
 			waitForButton();
 			while (true)
 			{
-				r.Drive.DriveVelocity = Vector.FromPolarCoords(1, angle);
-				angle += System.Math.PI / 4;
+				r.Drive.DriveVelocity = Vector.FromPolarCoords(2, System.Math.PI * angle / 3);
 				Thread.Sleep(750);
-
+				if (angle % 6 == 0)
+				{
+					r.Kicker.State = Solenoid.SolenoidState.Out;
+					Thread.Sleep(200);
+					r.Kicker.State = Solenoid.SolenoidState.In;
+				}
+				angle++;
 			}
 		}
 

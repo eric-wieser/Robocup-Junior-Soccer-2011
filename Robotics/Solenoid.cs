@@ -1,22 +1,39 @@
 using System;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
+using GHIElectronics.NETMF.Hardware;
 
 namespace Technobotts.Robotics
 {
-	class Solenoid
-	{/*
-		enum State {
+	public class Solenoid
+	{
+		public enum SolenoidState {
 			Out,
 			In
 		}
-		OutputPort _port;
-		State State { get {return _port.Read() ? State.In : State.Out; set; };
+		private PWM _port;
+		public int Frequency {get; set; }
 
-		public Solenoid(OutputPort port)
+		private SolenoidState _state;
+		public SolenoidState State {
+			get {return _state; }
+			set {
+				if (value == SolenoidState.Out)
+					_port.Set(Frequency, 50);
+				else
+					_port.Set(false);
+
+				_state = value;
+			}
+		}
+
+		public Solenoid(PWM port)
 		{
 			_port = port;
+			Frequency = 10000;
+			State = SolenoidState.In;
+		}
 
-		}*/
+		public Solenoid(PWM.Pin pin) :this(new PWM(pin)) { }
 	}
 }
