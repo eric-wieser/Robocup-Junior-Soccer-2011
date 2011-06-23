@@ -3,7 +3,7 @@ using System.Threading;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
-namespace Technobotts.Robotics
+namespace Technobotts.Hardware
 {
     public enum DistanceUnits
     {
@@ -31,16 +31,8 @@ namespace Technobotts.Robotics
             _port = new TristatePort(pin, false, false, Port.ResistorMode.Disabled);
         }
 
-        /// <summary>
-        /// Return the Ping))) sensor's reading in millimeters.
-        /// </summary>
-        /// <param name="usedefault">Set true to return value in the unit specified by the "Unit" property.
-        /// Set false to return value in mm.</param>
-        public double GetDistance()
-        {
-            long t1, t2;
-
-            // Set it to an putput
+		protected void SendPing() {
+            //Set it to an output
             _port.Active = true;
 
             //Send a quick HIGH pulse
@@ -49,16 +41,32 @@ namespace Technobotts.Robotics
 
             // Set it as an input
             _port.Active = false;  
+		}
 
-			//Wait till port is high
-            while (!_port.Read());
-            t1 = System.DateTime.Now.Ticks;
+		protected long AwaitResponse()
+		{
+			long t1, t2;
+
+			while (!_port.Read()) ;
+			t1 = System.DateTime.Now.Ticks;
 
 			//Wait till port is low
-            while (_port.Read()); 
-            t2 = System.DateTime.Now.Ticks;
+			while (_port.Read()) ;
+			t2 = System.DateTime.Now.Ticks;
 
-			long deltaT = t2 - t1;
+			return t2 - t1;
+		}
+
+        /// <summary>
+        /// Return the Ping))) sensor's reading in millimeters.
+        /// </summary>
+        /// <param name="usedefault">Set true to return value in the unit specified by the "Unit" property.
+        /// Set false to return value in mm.</param>
+        public double GetDistance()
+        {
+			SendPing();
+
+			long deltaT = AwaitResponse();
 
 			return Convert(deltaT / 2 * _metresPerTick, Unit);
         }

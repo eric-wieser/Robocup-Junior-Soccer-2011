@@ -29,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.DriveTest</StartupObject>
+    <StartupObject>Technobotts.Tests.USSensorTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -58,7 +58,7 @@
     <Compile Include="Robotics\RadialIntensityDetectorArray.cs" />
     <Compile Include="Robotics\AngleFinder.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
-    <Compile Include="Robotics\UltrasonicSensor.cs" />
+    <Compile Include="Hardware\UltrasonicSensor.cs" />
     <Compile Include="Soccer\Robot.cs" />
     <Compile Include="Tests\CompassTest.cs" />
     <Compile Include="Tests\DriveTest.cs" />
@@ -66,6 +66,7 @@
     <Compile Include="Tests\IRDetectorTest.cs" />
     <Compile Include="Tests\SolenoidTest.cs" />
     <Compile Include="Tests\MotorTest.cs" />
+    <Compile Include="Tests\USSensorTest.cs" />
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />
     <Compile Include="Utilities\Range.cs" />
