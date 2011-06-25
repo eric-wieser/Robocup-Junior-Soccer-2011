@@ -29,11 +29,17 @@ namespace Technobotts.Hardware
 		double _metresPerTick;
 
 		private long _timeout = 50;
+
 		public UltrasonicSensor(Cpu.Pin pin)
 		{
 			Unit = DistanceUnits.m;
 			OperatingTemperature = 20;
 			InnerPort = new TristatePort(pin, false, false, Port.ResistorMode.Disabled);
+
+			int initTick = TechnobottsRTC.Ticks;
+			Thread.Sleep(50);
+			Debug.Print("" + TechnobottsRTC.TickDiffSeconds(initTick));
+
 		}
 
 		public void SendPing()
@@ -48,8 +54,41 @@ namespace Technobotts.Hardware
 			// Set it as an input
 			InnerPort.Active = false;
 		}
+
+
+		private double _timoutSecs = 0.050;
+		protected double AwaitResponse()
+		{
+			int initTick = TechnobottsRTC.Ticks;
+			int highTime = 0;
+			while (TechnobottsRTC.TickDiffSeconds(initTick) < _timoutSecs)
+			{
+				if (InnerPort.Read())
+				{	// is the level high?  If so store the tick it started.
+					if (highTime == 0)
+					{
+						highTime = TechnobottsRTC.Ticks;
+					}
+				}
+				else
+				{
+
+					if (highTime != 0)
+					{
+						return TechnobottsRTC.TickDiffSeconds(highTime);
+					}
+				}
+			}
+			return DoubleEx.NaN;	// timeout		
+		}
+
+		internal Double CalculateDistance(double seconds)
+		{
+			return Convert(seconds * _metresPerTick / 2, Unit);
+		}
+
 #if true
-		protected long AwaitResponse()
+		protected long AwaitResponseOLD()
 		{
 			long cancelWait = System.Environment.TickCount + _timeout;
 
@@ -93,7 +132,7 @@ namespace Technobotts.Hardware
 		}
 #endif
 
-		internal Double CalculateDistance(long timeInterval)
+		internal Double CalculateDistanceOLD(long timeInterval)
 		{
 			return timeInterval < 0 ? DoubleEx.NaN : Convert(timeInterval * _metresPerTick / 2, Unit);
 		}
@@ -150,7 +189,7 @@ namespace Technobotts.Hardware
 			set {
 				_operatingTemperature = value;
 				double speed = _soundSpeed + _soundSpeedPerDegree * _operatingTemperature;
-				_metresPerTick = speed / TimeSpan.TicksPerSecond;
+				_metresPerTick = speed; /// TimeSpan.TicksPerSecond;
 			}
 			get {
 				return _operatingTemperature;
