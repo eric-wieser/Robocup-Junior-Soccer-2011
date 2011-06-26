@@ -31,8 +31,6 @@ namespace Technobotts.Robotics
 			}
 		}
 
-		protected IntensityDetectorArray() { }
-
 		public IntensityDetectorArray(OrientedIntensityDetector[] sensors)
 		{
 			Sensors = sensors;
@@ -51,7 +49,7 @@ namespace Technobotts.Robotics
 			{
 				sourceDirection += sensor.Intensity;
 			}
-			return sourceDirection == (Vector) 0 ?  0 : sourceDirection / MathEx.Sqrt(sourceDirection.Length);
+			return sourceDirection == 0 ?  0 : sourceDirection / MathEx.Sqrt(sourceDirection.Length);
 		}
 	}
 }

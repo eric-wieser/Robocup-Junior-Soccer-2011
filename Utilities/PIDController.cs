@@ -150,7 +150,7 @@ namespace Technobotts.Utilities
 						I * TotalError * Period +
 						D * (Error - PrevError) / Period;
 
-					//Normalize to wihthin max and min output
+					//Normalize to within max and min output
 					result = Output.Range.Clip(result);
 
 					PrevError = Error;
@@ -178,7 +178,6 @@ namespace Technobotts.Utilities
 		{
 			get
 			{
-				double acceptableError = Tolerance * Input.Range.Span;
 				return _tolerance.Contains(Error / Input.Range.Span);
 			}
 		}

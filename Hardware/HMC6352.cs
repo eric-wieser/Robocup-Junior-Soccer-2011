@@ -2,10 +2,11 @@ using System;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using Technobotts.Geometry;
+using Technobotts.Robotics;
 
 namespace Technobotts.Hardware
 {
-	public class HMC6352 : I2CDevice
+	public class HMC6352 : I2CDevice, AngleFinder
 	{
 		public const ushort DefaultAddress = 0x21;
 		public const int ClockSpeed = 100;
@@ -143,6 +144,15 @@ namespace Technobotts.Hardware
 				return getOutput() / 10.0;
 			}
 		}
+
+		public double Angle
+		{
+			get
+			{
+				return Heading / 180.0 * System.Math.PI;
+			}
+		}
+
 		public Vector MagnetometerReading
 		{
 			get

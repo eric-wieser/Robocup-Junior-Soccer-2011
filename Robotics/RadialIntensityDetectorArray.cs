@@ -5,18 +5,21 @@ namespace Technobotts.Robotics
 {
 	class RadialIntensityDetectorArray : IntensityDetectorArray
 	{
-		public RadialIntensityDetectorArray(IIntensityDetector[] sensors)
+		private static OrientedIntensityDetector[] prepareSensors(IIntensityDetector[] sensors)
 		{
 			double count = sensors.Length;
 			double angle = Math.PI * 2 / sensors.Length;
-			Sensors = new OrientedIntensityDetector[sensors.Length];
+			OrientedIntensityDetector[] preparedSensors = new OrientedIntensityDetector[sensors.Length];
 			for (int i = 0; i < count; i++)
 			{
-				Sensors[i] = new OrientedIntensityDetector(
+				preparedSensors[i] = new OrientedIntensityDetector(
 					sensors[i],
 					Vector.FromPolarCoords(1, i * angle)
 				);
 			}
+			return preparedSensors;
 		}
+
+		public RadialIntensityDetectorArray(IIntensityDetector[] sensors) : base(prepareSensors(sensors)) { }
 	}
 }

@@ -62,6 +62,7 @@
     <Compile Include="Robotics\AngleFinder.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
     <Compile Include="Soccer\Robot.cs" />
+    <Compile Include="Tests\BallFollowTest.cs" />
     <Compile Include="Tests\CompassTest.cs" />
     <Compile Include="Tests\DriveTest.cs" />
     <Compile Include="Tests\HelloWorld.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Tests\SolenoidTest.cs" />
     <Compile Include="Tests\MotorTest.cs" />
     <Compile Include="Tests\USSensorTest.cs" />
+    <Compile Include="Utilities\LowPassVectorFilter.cs" />
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />
     <Compile Include="Utilities\Range.cs" />

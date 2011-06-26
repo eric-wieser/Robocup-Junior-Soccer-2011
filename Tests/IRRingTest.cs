@@ -5,6 +5,7 @@ using Technobotts;
 using Technobotts.Robotics;
 using GHIElectronics.NETMF.FEZ;
 using Technobotts.Geometry;
+using Technobotts.Utilities;
 
 namespace Technobotts.Tests
 {
@@ -50,11 +51,13 @@ namespace Technobotts.Tests
 				Debug.Print("");
 			}
 #endif
+			LowPassVectorFilter filter = new LowPassVectorFilter(0.5, 0.06);
 			while (true)
 			{
 				DateTime t1 = DateTime.UtcNow;
 				Vector intensity = sensors.Get();
 				DateTime t2 = DateTime.UtcNow;
+				intensity = filter.apply(intensity);
 				Debug.Print(intensity.ToString("f1"));
 				Debug.Print((t2-t1).ToString());
 			}

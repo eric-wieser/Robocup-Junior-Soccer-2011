@@ -116,8 +116,7 @@ namespace Technobotts.Geometry
 
 		public override bool Equals(Object obj)
 		{
-			Vector that = obj as Vector;
-			return that != null && X == that.X && Y == that.Y;
+			return obj as Vector == this;
 		}
 
 		public override int GetHashCode()

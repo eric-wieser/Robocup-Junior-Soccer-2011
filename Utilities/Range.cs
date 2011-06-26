@@ -14,7 +14,7 @@ namespace Technobotts.Utilities
 			if (min > max)
 				throw new ArgumentOutOfRangeException(
 					"max",
-					"Lower bound must be lesser than upper bound!");
+					"Lower bound must be less than upper bound!");
 			Min = min;
 			Max = max;
 		}
