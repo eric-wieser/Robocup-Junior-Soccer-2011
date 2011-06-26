@@ -5,6 +5,7 @@ namespace Technobotts.Robotics
 {
 	public interface IIntensityDetector
 	{
-		double Intensity { get; }
+		int Intensity { get; }
+		void Recalculate();
 	}
 }

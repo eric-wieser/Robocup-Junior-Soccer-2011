@@ -10,7 +10,7 @@ namespace Technobotts.Tests
 {
 	class IRDetectorTest
 	{
-		static IRDetector sensor = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di0);
+		static IRDetector sensor = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di26);
 		static double getReading(int count = 10)
 		{
 			int reading = 0;
@@ -46,8 +46,8 @@ namespace Technobotts.Tests
 		}
 		public static void Main()
 		{
-			TestFakeSensor();
-			//TestRealSensor();
+			//TestFakeSensor();
+			TestRealSensor();
 		}
 	}
 }

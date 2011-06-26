@@ -8,6 +8,7 @@ namespace Technobotts.Geometry
 		public static readonly Vector Zero = new Vector(0, 0);
 		public static readonly Vector I = new Vector(1, 0);
 		public static readonly Vector J = new Vector(0, 1);
+		private static readonly Vector NaN = new Vector(DoubleEx.NaN, DoubleEx.NaN);
 
 		public readonly double X;
 		public readonly double Y;
@@ -30,7 +31,7 @@ namespace Technobotts.Geometry
 
 		public static Vector operator /(Vector v, double k)
 		{
-			return new Vector(v.X / k, v.Y / k);
+			return k == 0 ? NaN : new Vector(v.X / k, v.Y / k);
 		}
 
 		public static Vector operator +(Vector a, Vector b)
@@ -46,6 +47,29 @@ namespace Technobotts.Geometry
 		public static Vector operator -(Vector v)
 		{
 			return new Vector(-v.X, -v.Y);
+		}
+
+		public static bool operator ==(Vector a, Vector b)
+		{
+			// If both are null, or both are same instance, return true.
+			if (System.Object.ReferenceEquals(a, b))
+			{
+				return true;
+			}
+
+			// If one is null, but not both, return false.
+			if (((object)a == null) || ((object)b == null))
+			{
+				return false;
+			}
+
+			// Return true if the fields match:
+			return a.X == b.X && a.Y == b.Y;
+		}
+
+		public static bool operator !=(Vector a, Vector b)
+		{
+			return !(a == b);
 		}
 
 		public Vector Perpendicular
@@ -83,7 +107,11 @@ namespace Technobotts.Geometry
 
 		public override string ToString()
 		{
-			return "(" + X + ", " + Y + ")";
+			return ToString("");
+		}
+		public string ToString(string format)
+		{
+			return (X < 0 ? "(": "( ") + X.ToString(format) + (Y < 0 ? ",": ", ") + Y.ToString(format) + ")";
 		}
 
 		public override bool Equals(Object obj)

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.SPOT;
 using Technobotts.Geometry;
+using GHIElectronics.NETMF.System;
 
 namespace Technobotts.Robotics
 {
@@ -16,10 +17,21 @@ namespace Technobotts.Robotics
 
 			public IIntensityDetector Detector;
 			public Vector Orientation;
-			public Vector Intensity { get { return Detector.Intensity * Orientation; } }
+			public Vector Intensity
+			{
+				get
+				{
+					int intensity = (int)Detector.Intensity;
+					return intensity * intensity * Orientation;
+				}
+			}
+			public void Recalculate()
+			{
+				Detector.Recalculate();
+			}
 		}
 
-		public IntensityDetectorArray() { }
+		protected IntensityDetectorArray() { }
 
 		public IntensityDetectorArray(OrientedIntensityDetector[] sensors)
 		{
@@ -28,14 +40,18 @@ namespace Technobotts.Robotics
 
 		public OrientedIntensityDetector[] Sensors { get; protected set; }
 
-		public Vector get()
+		public Vector Get()
 		{
 			Vector sourceDirection = 0;
 			foreach (OrientedIntensityDetector sensor in Sensors)
 			{
+				sensor.Recalculate();
+			}
+			foreach (OrientedIntensityDetector sensor in Sensors)
+			{
 				sourceDirection += sensor.Intensity;
 			}
-			return sourceDirection;
+			return sourceDirection == (Vector) 0 ?  0 : sourceDirection / MathEx.Sqrt(sourceDirection.Length);
 		}
 	}
 }

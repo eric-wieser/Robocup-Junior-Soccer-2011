@@ -7,33 +7,32 @@ using GHIElectronics.NETMF.Hardware;
 
 namespace Technobotts.Robotics
 {
-	class IRDetector : PwmIn
+	class IRDetector : PwmIn, IIntensityDetector
 	{
 		public const int CarrierFrequency = 40; //kHz
 		new public int Period = 833;
 		public IRDetector(Cpu.Pin pin) : base(pin, 2) { }
-		private long[] signalStrength = {0, 200, 300, 400, 500};
 		public int Intensity
 		{
 			get
 			{
-				const long shortPulse = 1000 / 40;
+				const long shortPulse = 1000 / CarrierFrequency;
 
 				long pulseWidth = (long)((1-DutyCycle) * Period);
 
 				//No pulses
 				if (pulseWidth < 4 * shortPulse)
 					return 0;
-				//Full power: 8 pulses
+				//Only 8 full power pulses
 				else if (pulseWidth < 10 * shortPulse)
 					return 1;
-				//Quarter power: 4 pulses
+				//Also 4 quarter power pulses
 				else if (pulseWidth < 14 * shortPulse)
 					return 2;
-				//Sixteenth power: 4 pulses
+				//Also 4 Sixteenth power pulses
 				else if (pulseWidth < 18 * shortPulse)
 					return 3;
-				//64th power: 4 pulses
+				//Also 4 64th power pulses - Very close
 				else
 					return 4;
 			}

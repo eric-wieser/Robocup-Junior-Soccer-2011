@@ -1,6 +1,7 @@
 //#define NoMotors
 
 using System;
+using Microsoft.SPOT.Hardware;
 using Technobotts.Geometry;
 using Technobotts.Robotics.Navigation;
 using Technobotts.Robotics;
@@ -12,7 +13,7 @@ namespace Technobotts.Soccer
 	public class Robot
 	{
 		AngleFinder Compass;
-		IntensityDetectorArray BallDetector;
+		public IntensityDetectorArray BallDetector;
 		IMotor MotorA;
 		IMotor MotorB;
 		IMotor MotorC;
@@ -51,6 +52,22 @@ namespace Technobotts.Soccer
 			);
 
 			Kicker = new Solenoid(PWM.Pin.PWM5);
+
+			FEZ_Pin.Digital[] pins = new FEZ_Pin.Digital[] {
+				FEZ_Pin.Digital.Di36, FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di38, FEZ_Pin.Digital.Di39,
+				FEZ_Pin.Digital.Di40, FEZ_Pin.Digital.Di41, FEZ_Pin.Digital.Di42, FEZ_Pin.Digital.Di43,
+				FEZ_Pin.Digital.Di44, FEZ_Pin.Digital.Di45, FEZ_Pin.Digital.Di46, FEZ_Pin.Digital.Di47,
+				FEZ_Pin.Digital.Di48, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di51
+			};
+
+			IIntensityDetector[] detectors = new IRDetector[pins.Length];
+
+			for (int i = 0; i < pins.Length; i++)
+			{
+				detectors[i] = new IRDetector((Cpu.Pin)pins[i]);
+			}
+
+			BallDetector = new RadialIntensityDetectorArray(detectors);
 		}
 	}
 }
