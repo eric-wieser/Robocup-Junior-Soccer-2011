@@ -1,21 +1,23 @@
 using System;
 using Microsoft.SPOT;
 using GHIElectronics.NETMF.System;
+using Technobotts.Geometry;
 namespace Technobotts.Utilities
 {
-	class LowPassFilter
+	class LowPassVectorFilter
 	{
 		private bool initialized = false;
 
 		private double a;
 
-		private double _output;
+		private Vector _output;
 
-		public LowPassFilter(double tau, double period) {
+		public LowPassVectorFilter(double tau, double period)
+		{
 			a = MathEx.Exp(-period / tau);
 		}
 
-		public double apply(double value)
+		public Vector apply(Vector value)
 		{
 			if (initialized)
 			{
