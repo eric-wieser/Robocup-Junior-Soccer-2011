@@ -59,7 +59,7 @@ namespace Technobotts.Soccer
 				FEZ_Pin.Digital.Di44, FEZ_Pin.Digital.Di45, FEZ_Pin.Digital.Di46, FEZ_Pin.Digital.Di47,
 				FEZ_Pin.Digital.Di48, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di51
 			};
-
+			x
 			IIntensityDetector[] detectors = new IRDetector[pins.Length];
 
 			for (int i = 0; i < pins.Length; i++)
