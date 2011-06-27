@@ -1,0 +1,171 @@
+Archive member included because of file (symbol)
+
+c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+                              SensorPoller.o (__aeabi_ui2f)
+c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+                              SensorPoller.o (__aeabi_fmul)
+c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+                              SensorPoller.o (__aeabi_f2uiz)
+
+Allocating common symbols
+Common symbol       size              file
+
+endTimes            0x50              SensorPoller.o
+remainingToSample   0x1               SensorPoller.o
+startTimes          0x50              SensorPoller.o
+remainingToCapture  0x1               SensorPoller.o
+activeMasks         0xc               SensorPoller.o
+p2InfraredMask      0x4               SensorPoller.o
+ultrasoundMask      0x4               SensorPoller.o
+lastPortReading     0xc               SensorPoller.o
+p1InfraredMask      0x4               SensorPoller.o
+lastSampleTime      0x4               SensorPoller.o
+sampling            0x14              SensorPoller.o
+p0InfraredMask      0x4               SensorPoller.o
+samplingMasks       0xc               SensorPoller.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+SDRAM            0x40000440         0x000027fc         xw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0/../../../../arm-none-eabi/lib\libc.a
+LOAD c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a
+LOAD SensorPoller.o
+START GROUP
+LOAD c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a
+LOAD c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x00000000                . = ALIGN (0x4)
+
+.text           0x40000440      0xf40
+ *(.text)
+ .text          0x40000440      0x948 SensorPoller.o
+                0x40000440                expired
+                0x40000484                delay_until
+                0x400004bc                one_time_sensor_init
+                0x400004d4                process_readings
+                0x40000908                acquire_data
+                0x40000d14                Acquire_test
+ .text          0x40000d88      0x2ac c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+                0x40000d88                __aeabi_frsub
+                0x40000d90                __subsf3
+                0x40000d90                __aeabi_fsub
+                0x40000d94                __aeabi_fadd
+                0x40000d94                __addsf3
+                0x40000f50                __aeabi_ui2f
+                0x40000f50                __floatunsisf
+                0x40000f58                __aeabi_i2f
+                0x40000f58                __floatsisf
+                0x40000f78                __aeabi_ul2f
+                0x40000f78                __floatundisf
+                0x40000f88                __aeabi_l2f
+                0x40000f88                __floatdisf
+ .text          0x40001034      0x2f8 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+                0x40001034                __mulsf3
+                0x40001034                __aeabi_fmul
+                0x400011cc                __aeabi_fdiv
+                0x400011cc                __divsf3
+ .text          0x4000132c       0x54 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+                0x4000132c                __fixunssfsi
+                0x4000132c                __aeabi_f2uiz
+
+.glue_7         0x40001380        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x40001380        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x40001380        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x40001380        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+                0x40001380                . = ALIGN (0x4)
+
+.rodata         0x40001380      0x11c
+ *(.rodata)
+ .rodata        0x40001380      0x11c SensorPoller.o
+                0x40001380                Masks
+                0x400013d0                ActiveStateMask
+                0x40001420                InactiveStateMask
+                0x40001470                portIndexes
+                0x40001484                portFirstIndexes
+                0x40001488                irMap
+                0x40001498                usoundMap
+                0x4000149c                . = ALIGN (0x4)
+
+.data           0x4000149c        0x4
+ *(.data)
+ .data          0x4000149c        0x4 SensorPoller.o
+                0x4000149c                speedOfSound
+ .data          0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .data          0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .data          0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+                0x400014a0                . = ALIGN (0x4)
+
+.bss            0x400014a0       0xf4
+                0x400014a0                __bss_start__ = .
+ *(.bss)
+ .bss           0x400014a0        0x0 SensorPoller.o
+ .bss           0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .bss           0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .bss           0x400014a0        0x0 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+                0x400014a0                __bss_end__ = .
+ COMMON         0x400014a0       0xf4 SensorPoller.o
+                0x400014a0                endTimes
+                0x400014f0                remainingToSample
+                0x400014f4                startTimes
+                0x40001544                remainingToCapture
+                0x40001548                activeMasks
+                0x40001554                p2InfraredMask
+                0x40001558                ultrasoundMask
+                0x4000155c                lastPortReading
+                0x40001568                p1InfraredMask
+                0x4000156c                lastSampleTime
+                0x40001570                sampling
+                0x40001584                p0InfraredMask
+                0x40001588                samplingMasks
+                0x40001594                end = .
+OUTPUT(../Resources/SensorPoller.elf elf32-littlearm)
+
+.comment        0x00000000       0x11
+ .comment       0x00000000       0x11 SensorPoller.o
+                                 0x12 (size before relaxing)
+
+.ARM.attributes
+                0x00000000       0x32
+ .ARM.attributes
+                0x00000000       0x32 SensorPoller.o
+ .ARM.attributes
+                0x00000032       0x1a c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .ARM.attributes
+                0x0000004c       0x1a c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .ARM.attributes
+                0x00000066       0x1a c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+
+.debug_line     0x00000000      0x2c7
+ .debug_line    0x00000000      0x120 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .debug_line    0x00000120      0x12a c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .debug_line    0x0000024a       0x7d c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+
+.debug_info     0x00000000      0x1c5
+ .debug_info    0x00000000       0x97 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .debug_info    0x00000097       0x97 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .debug_info    0x0000012e       0x97 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+
+.debug_abbrev   0x00000000       0x3c
+ .debug_abbrev  0x00000000       0x14 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .debug_abbrev  0x00000014       0x14 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .debug_abbrev  0x00000028       0x14 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
+
+.debug_aranges  0x00000000       0x60
+ .debug_aranges
+                0x00000000       0x20 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_addsubsf3.o)
+ .debug_aranges
+                0x00000020       0x20 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_muldivsf3.o)
+ .debug_aranges
+                0x00000040       0x20 c:/apps/yagarto/bin/../lib/gcc/arm-none-eabi/4.6.0\libgcc.a(_arm_fixunssfsi.o)
