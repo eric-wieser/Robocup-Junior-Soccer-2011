@@ -11,21 +11,21 @@ namespace Technobotts.Tests
 {
 	class MotorTest
 	{
-		public static InputPort button;
 
 		public static void Main()
 		{
-			button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
+			Soccer.Robot r = new Soccer.Robot();
 			double i = 0;
 			double step = System.Math.PI / 16;
-			using (DCMotor motor = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di20, FEZ_Pin.Digital.Di21))
+
+			while (!r.Button.Read()) ;
+			while (r.Button.Read()) ;
+
+			while (true)
 			{
-				while (button.Read())
-				{
-					motor.Speed = MathEx.Sin(i);
-					i += step;
-					Thread.Sleep(50);
-				}
+				r.MotorA.Speed = MathEx.Sin(i);
+				i += step;
+				Thread.Sleep(50);
 			}
 		}
 	}

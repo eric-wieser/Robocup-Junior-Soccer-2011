@@ -14,9 +14,9 @@ namespace Technobotts.Soccer
 	public class Robot
 	{
 		public IntensityDetectorArray BallDetector;
-		IMotor MotorA;
-		IMotor MotorB;
-		IMotor MotorC;
+		public IMotor MotorA;
+		public IMotor MotorB;
+		public IMotor MotorC;
 
 		public HolonomicDrive Drive;
 		public Solenoid Kicker;
@@ -37,9 +37,9 @@ namespace Technobotts.Soccer
 				MotorB = new FakeMotor{Name = "B"};
 				MotorC = new FakeMotor{Name = "C"};
 			#else
-				MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di20);
-				MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di22);
-				MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di25, FEZ_Pin.Digital.Di24);
+				MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29);
+				MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31);
+				MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33);
 			#endif
 
 			Drive = new HolonomicDrive(
