@@ -1,6 +1,8 @@
 //#define NoMotors
 
 using System;
+using Math = System.Math;
+using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using Technobotts.Geometry;
 using Technobotts.Robotics.Navigation;
@@ -22,59 +24,59 @@ namespace Technobotts.Soccer
 		public Solenoid Kicker;
 		public InputPort Button;
 		public AngleFinder Compass;
+		public LightGate LightGate;
 
-		FEZ_Pin.Digital[] IRDetectorPins = new FEZ_Pin.Digital[] {
-			FEZ_Pin.Digital.Di36, FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di38, FEZ_Pin.Digital.Di39,
-			FEZ_Pin.Digital.Di40, FEZ_Pin.Digital.Di41, FEZ_Pin.Digital.Di42, FEZ_Pin.Digital.Di43,
-			FEZ_Pin.Digital.Di44, FEZ_Pin.Digital.Di45, FEZ_Pin.Digital.Di46, FEZ_Pin.Digital.Di47,
-			FEZ_Pin.Digital.Di48, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di51
-		};
+		public SensorPoller SensorPoller;
 
 		public Robot()
 		{
+			SensorPoller = new SensorPoller();
 			#if NoMotors
 				MotorA = new FakeMotor{Name = "A"};
 				MotorB = new FakeMotor{Name = "B"};
 				MotorC = new FakeMotor{Name = "C"};
 			#else
-				MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29);
-				MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31);
-				MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33);
+			DCMotor.SpeedToPWMFunction s = DCMotor.Characteristic.Linear;
+			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29)
+			{ SpeedCharacteristic = s };
+
+			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31)
+			{ SpeedCharacteristic = s };
+
+			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33)
+			{ SpeedCharacteristic = s };
 			#endif
 
+
+				Matrix wheelMatrix = new Matrix(-60 * Math.PI, 0, 0, 12 * Math.PI);
+				Vector wheelPosition = Vector.J * 95;
 			Drive = new HolonomicDrive(
 				new HolonomicDrive.Wheel(
-					Vector.FromPolarCoords(95, - Math.PI * 2 / 3),
-					Matrix.FromRotation(- Math.PI * 2 / 3),
+					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
+					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelMatrix,
 					MotorA
 				),
 				new HolonomicDrive.Wheel(
-					Vector.FromPolarCoords(95, 0),
-					Matrix.FromRotation(0),
+					Matrix.Rotate180 * wheelPosition,
+					Matrix.Rotate180 * wheelMatrix,
 					MotorB
 				),
 				new HolonomicDrive.Wheel(
-					Vector.FromPolarCoords(95, Math.PI * 2 / 3),
-					Matrix.FromRotation(Math.PI * 2 / 3),
+					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelPosition,
+					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelMatrix,
 					MotorC
 				)
 			);
 
 			Kicker = new Solenoid(PWM.Pin.PWM5);
 
-
-			IIntensityDetector[] detectors = new IRDetector[IRDetectorPins.Length];
-
-			for (int i = 0; i < IRDetectorPins.Length; i++)
-			{
-				detectors[i] = new IRDetector((Cpu.Pin)IRDetectorPins[i]);
-			}
-
-			BallDetector = new RadialIntensityDetectorArray(detectors);
+			BallDetector = IntensityDetectorArray.FromRadialSensors(SensorPoller.IRSensors);
 
 			Button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
 
 			Compass = new HMC6352();
+
+			LightGate = new LightGate(FEZ_Pin.AnalogIn.An0, 350, 160);
 		}
 	}
 }

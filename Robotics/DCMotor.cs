@@ -8,6 +8,16 @@ namespace Technobotts.Robotics
 {
 	public class DCMotor : IMotor, IDisposable
 	{
+		public delegate double SpeedToPWMFunction(double speed);
+		public static class Characteristic
+		{
+			public static SpeedToPWMFunction Linear = (x) => x;
+			public static SpeedToPWMFunction SteepEnd = (x) => x * x;
+			public static SpeedToPWMFunction SteepStart = (x) => 1 - (1 - x) * (1 - x);
+		}
+
+		public SpeedToPWMFunction SpeedCharacteristic = Characteristic.Linear;
+
 		private PWM _pwm;
 		private OutputPort _dir1;
 		private OutputPort _dir2;
@@ -40,12 +50,12 @@ namespace Technobotts.Robotics
 				if (value > 0)
 				{
 					forward();
-					setPWM(value);
+					setPWM(SpeedCharacteristic(value));
 				}
 				else if (value < 0)
 				{
 					backward();
-					setPWM(-value);
+					setPWM(SpeedCharacteristic(-value));
 				}
 				else if (NeutralMode == NeutralMode.Brake)
 					brake();

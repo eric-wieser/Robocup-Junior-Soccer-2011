@@ -29,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.DriveTest</StartupObject>
+    <StartupObject>Technobotts.Tests.BallFollowTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -39,6 +39,7 @@
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
     <Compile Include="Hardware\I2CException.cs" />
+    <Compile Include="Hardware\LightGate.cs" />
     <Compile Include="Hardware\SyncedUltrasonicSensors.cs" />
     <Compile Include="Hardware\TechnobottsRTC.cs" />
     <Compile Include="Hardware\UltrasonicSensor2.cs" />
@@ -55,11 +56,12 @@
     <Compile Include="Robotics\IMotor.cs" />
     <Compile Include="Robotics\IIntensityDetector.cs" />
     <Compile Include="Robotics\IntensityDetectorArray.cs" />
+    <Compile Include="Robotics\IRangeFinder.cs" />
     <Compile Include="Robotics\IRDetector.cs" />
     <Compile Include="Hardware\PwmIn.cs" />
     <Compile Include="Robotics\Navigation\HolonomicDrive.cs" />
-    <Compile Include="Robotics\RadialIntensityDetectorArray.cs" />
     <Compile Include="Robotics\AngleFinder.cs" />
+    <Compile Include="Robotics\SensorPoller.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
     <Compile Include="Soccer\Robot.cs" />
     <Compile Include="Tests\BallFollowTest.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Tests\HelloWorld.cs" />
     <Compile Include="Tests\IRDetectorTest.cs" />
     <Compile Include="Tests\IRRingTest.cs" />
+    <Compile Include="Tests\LaserTest.cs" />
     <Compile Include="Tests\RLPTest.cs" />
     <Compile Include="Tests\RTCTest.cs" />
     <Compile Include="Tests\SolenoidTest.cs" />

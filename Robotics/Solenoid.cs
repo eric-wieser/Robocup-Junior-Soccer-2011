@@ -5,7 +5,7 @@ using GHIElectronics.NETMF.Hardware;
 
 namespace Technobotts.Robotics
 {
-	public class Solenoid
+	public class Solenoid : IDisposable
 	{
 		public enum SolenoidState {
 			Out,
@@ -35,5 +35,10 @@ namespace Technobotts.Robotics
 		}
 
 		public Solenoid(PWM.Pin pin) :this(new PWM(pin)) { }
+
+		public void Dispose()
+		{
+			_port.Dispose();
+		}
 	}
 }

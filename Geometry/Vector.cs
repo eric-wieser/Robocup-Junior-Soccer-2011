@@ -97,7 +97,7 @@ namespace Technobotts.Geometry
 		}
 		public static implicit operator Vector(double k)
 		{
-			return new Vector(k, k);
+			return k == 0 ? Zero : new Vector(k, k);
 		}
 
 		public static explicit operator double(Vector v)

@@ -20,11 +20,17 @@ namespace Technobotts.Geometry
 		private double _a, _b, _c, _d;
 		private Matrix _inverseMatrix = null; //Store for cheap future usage
 
+		/// <param name="angle">Angle of counterclockwise rotation, in radians</param>
 		public static Matrix FromRotation(double angle)
 		{
 			double sinA = MathEx.Sin(angle);
 			double cosA = MathEx.Cos(angle);
-			return new Matrix(cosA, sinA, -sinA, cosA);
+			return new Matrix(cosA, -sinA, sinA, cosA);
+		}
+
+		public static Matrix FromClockwiseRotation(double angle)
+		{
+			return FromRotation(-angle);
 		}
 		/**
 		 * Construct a square 2x2 Matrix representing the transformation onto a new

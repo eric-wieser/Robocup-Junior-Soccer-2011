@@ -30,10 +30,14 @@ namespace Technobotts.Robotics.Navigation
 
 			public double TargetSpeed { get; set; }
 
+
+			//private Vector v;
 			public Vector TargetVector
 			{
+				//get { return v; }
 				set
 				{
+					//v = value;
 					Vector wheelVector = transformMatrix.Inverse * value;
 					TargetSpeed = wheelVector.X;
 				}
@@ -47,19 +51,21 @@ namespace Technobotts.Robotics.Navigation
 
 		Wheel[] Wheels;
 
+		public Vector RotationPoint = 0;
+
 		public HolonomicDrive(params Wheel[] wheels)
 		{
 			Wheels = wheels;
 		}
 
-		private Vector _driveVelocity;
+		private Vector _driveVelocity = 0;
 		public Vector DriveVelocity
 		{
 			get { return _driveVelocity; }
 			set { _driveVelocity = value; update(); }
 		}
 
-		private double _turnVelocity;
+		private double _turnVelocity = 0;
 		public double TurnVelocity
 		{
 			get { return _turnVelocity; }
@@ -78,7 +84,7 @@ namespace Technobotts.Robotics.Navigation
 		{
 			foreach (Wheel wheel in Wheels)
 			{
-				wheel.TargetVector = DriveVelocity + wheel.position.Perpendicular * TurnVelocity;
+				wheel.TargetVector = DriveVelocity + (wheel.position - RotationPoint).Perpendicular * TurnVelocity;
 			}
 
 			normalize();

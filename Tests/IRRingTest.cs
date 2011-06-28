@@ -27,7 +27,7 @@ namespace Technobotts.Tests
 				detectors[i] = new IRDetector((Cpu.Pin)pins[i]);
 			}
 
-			IntensityDetectorArray sensors = new RadialIntensityDetectorArray(detectors);
+			IntensityDetectorArray sensors = IntensityDetectorArray.FromRadialSensors(detectors);
 #if false
 			String[] intensities = new String[5];
 			while (true)
