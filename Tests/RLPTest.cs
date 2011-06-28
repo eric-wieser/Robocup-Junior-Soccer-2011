@@ -20,43 +20,34 @@ namespace Technobotts.Tests
 			FEZ_Pin.Digital.Di20, FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di22, FEZ_Pin.Digital.Di23
 		};
 
+		public static void InitRLP()
+		{
+			/*new byte[] { 0x50, 0xA4, 0x68, 0x74, 0x83, 0x75, 0xBA, 0x40, 0x2D, 0x84, 0xAF, 0x46, 0x78, 0xCC, 0x8F, 0x49, 0xDF, 0xBD, 0xCF, 0x52, 0xA3, 0x1D, 0x5A, 0xC5, 0xE4, 0x99, 0x19, 0x27, 0xC5, 0x36, 0xF2, 0xA5 }*/
+			RLP.Enable();
+			RLP.Unlock(
+				Resources.GetString(Resources.StringResources.UserID),
+				Resources.GetBytes(Resources.BinaryResources.Key)
+			);
+		}
+
+		public static RLP.Procedure GetDataProcedure()
+		{
+			byte[] elf_file = Resources.GetBytes(Resources.BinaryResources.SensorPoller);
+			RLP.LoadELF(elf_file);
+			RLP.InitializeBSSRegion(elf_file);
+
+			RLP.Procedure procedure = RLP.GetProcedure(elf_file, "acquire_data");
+			elf_file = null;
+			Debug.GC(true);
+
+			return procedure;
+		}
+
         public static void Main()
         {
-            // Make sure to enable and unlock RLP before use!
-            RLP.Enable();
-			
-            // Unlock RLP
-			RLP.Unlock("TECHNOBOTTS@GMAIL.COMC75413E5F2D", new byte[] { 0x50, 0xA4, 0x68, 0x74, 0x83, 0x75, 0xBA, 0x40, 0x2D, 0x84, 0xAF, 0x46, 0x78, 0xCC, 0x8F, 0x49, 0xDF, 0xBD, 0xCF, 0x52, 0xA3, 0x1D, 0x5A, 0xC5, 0xE4, 0x99, 0x19, 0x27, 0xC5, 0x36, 0xF2, 0xA5 });
+			InitRLP();
+			RLP.Procedure GetData = GetDataProcedure();
 
-			byte[] elf_file = Resources.GetBytes(Resources.BinaryResources.SensorPoller);
-            RLP.LoadELF(elf_file);
-
-            // This method initializes BSS region to zeros using the default addresses declared in the GHI RLP examples linker script
-            // "__bss_start__" and "__bss_end__"
-            RLP.InitializeBSSRegion(elf_file);
-            //or in a customized way
-            //RLP.InitializeBSSRegion(elf_file, "__bss_start__", "__bss_end__");
-
-
-
-
-			RLP.Procedure acquire_data = RLP.GetProcedure(elf_file, "acquire_data");
-			RLP.Procedure tick_test = RLP.GetProcedure(elf_file, "Acquire_test");
-#if bogus
-			RLP.Procedure ArgumentTest = RLP.GetProcedure(elf_file, "ArgumentTest");
-//            RLP.Procedure FloatTest = RLP.GetProcedure(elf_file, "FloatTest");
-#endif
-
-
-            // We don't need this anymore
-            elf_file = null;
-            Debug.GC(true);
-
-			do
-			{
-				Debug.Print(tick_test.Invoke().ToString());
-			} while (false);
-			
 			InputPort[] ports = new InputPort[16];
 			for (int i = 0; i < IRDetectorPins.Length; i++)
 			{
@@ -74,7 +65,7 @@ namespace Technobotts.Tests
 			while (true)
 			{
 				DateTime dtNow = DateTime.UtcNow;
-				int time = acquire_data.InvokeEx(myArray);
+				int time = GetData.InvokeEx(myArray);
 				Debug.Print((DateTime.UtcNow - dtNow).ToString());
 				Debug.Print("Expiry Time=" + time);
 				for (int i = 0; i < 20; i++)

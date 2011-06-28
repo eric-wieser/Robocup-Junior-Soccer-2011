@@ -1,8 +1,6 @@
-// You might need to change this depending on the location of the header file
 #include <RLP.h>
 #include <lpc23xx.h>
 
-#if 1
 #define RLP_ADDRESS		0x40000440
 #define RLP_SIZE		0x000027FC
 
@@ -46,9 +44,9 @@ typedef unsigned char byte;
 #define EI { /* RLPext->Interrupt.GlobalInterruptEnable(); */ }
 
 
-#define TIMERFREQ 18000000
-#define TICKS_PER_US 18
-#define TICKS_PER_S TIMERFREQ
+#define TICKS_PER_S 18000000
+#define TICKS_PER_US (TICKS_PER_S / 1000000)
+
 #define CM_PER_METER 100
 
 
@@ -60,7 +58,7 @@ typedef unsigned char byte;
 
 bool expired(unsigned long expireTime)
 {
-	int diff =(expireTime - T0TC);
+	int diff = (expireTime - T0TC);
 	return (diff < 0);
 }
 
@@ -74,10 +72,11 @@ unsigned long p1InfraredMask;
 unsigned long p2InfraredMask;
 unsigned long ultrasoundMask;
 
-enum eState { WAITING_FOR_INITIAL_STATE = 0, 
-		WAITING_FOR_START_TRANSITION = 1,
-		WAITING_FOR_END_TRANSITION= 2,
-		WAIT_COMPLETED = 3
+enum eState {
+	WAITING_FOR_INITIAL_STATE = 0, 
+	WAITING_FOR_START_TRANSITION = 1,
+	WAITING_FOR_END_TRANSITION = 2,
+	WAIT_COMPLETED = 3
 };
 
 #define INFRARED_COUNT 16
@@ -90,13 +89,13 @@ unsigned long activeMasks[PORT_COUNT];			// the masks of pins we're actively loo
 unsigned long samplingMasks[PORT_COUNT];		// the masks of pins we're looking to begin sampling on.
 unsigned long lastSampleTime;
 
-byte sampling[SENSOR_COUNT];		// 0 => not started, 1=>waiting for start transition, 2=>waiting for end transition
+enum eState sampling[SENSOR_COUNT];
 unsigned long startTimes[SENSOR_COUNT];
 unsigned long endTimes[SENSOR_COUNT];
 byte remainingToCapture;
 byte remainingToSample;
 
-#define soundSpeedAt0C  331.29f
+#define soundSpeedAt0C       331.29f
 #define soundSpeedPerDegree  0.606f
 float speedOfSound = soundSpeedAt0C + soundSpeedPerDegree * 25;
 
@@ -165,7 +164,7 @@ void process_readings()
 	scratch[0] = FIO0PIN;
 	scratch[1] = FIO1PIN;
 	scratch[2] = FIO2PIN;
-	
+
 
 	if (remainingToSample)
 	{
@@ -190,10 +189,10 @@ void process_readings()
 		}
 	}
 
-	for (j = 0; j<PORT_COUNT && remainingToCapture;j++)
+	for (j = 0; j < PORT_COUNT && remainingToCapture;j++)
 	{
 		scratch[j] &= activeMasks[j];
-		
+
 		if (scratch[j] != lastPortReading[j])
 		{
 			e = portFirstIndexes[j+1];
@@ -201,7 +200,7 @@ void process_readings()
 			for (i= portFirstIndexes[j];i<e;i++)
 			{
 				tmpMask = Masks[i];
-				if (sampling[i]==WAITING_FOR_START_TRANSITION)
+				if (sampling[i] == WAITING_FOR_START_TRANSITION)
 				{
 					if ((tmpMask & scratch[j]) == ActiveStateMask[i])
 					{
@@ -233,7 +232,7 @@ int acquire_data(byte *resultsArray, void **args, unsigned int argsCount, unsign
 	// on return [0..15] filled with number of carrier frequency pulses on IR sensors
 	//           [16..19] filled with cms from ultrasound sensors
 	byte *results = resultsArray;
-	int i,j;
+	int i, j;
 	unsigned long expiryTime;
 	p0InfraredMask = (P12MASK-1)& ~(P8MASK-1);		// pins 8-11 inclusive
 	p1InfraredMask = (P30MASK-1)& ~(P22MASK-1);	// pins 22-29 inclusive;
@@ -248,7 +247,7 @@ int acquire_data(byte *resultsArray, void **args, unsigned int argsCount, unsign
 	expiryTime = T0TC + USEC(10);	// stash expiry time.
 
 	// do some more processing, initialization
-	for (i=0;i<SENSOR_COUNT;i++)
+	for (i = 0; i < SENSOR_COUNT; i++)
 	{
 		startTimes[i] = endTimes[i] = 0;
 		sampling[i] = WAITING_FOR_INITIAL_STATE;
@@ -261,7 +260,7 @@ int acquire_data(byte *resultsArray, void **args, unsigned int argsCount, unsign
 
 	remainingToCapture = 20;
 	remainingToSample = 20;
-		
+
 #if 0
 	while (!expired(expiryTime))
 	{
@@ -277,7 +276,7 @@ int acquire_data(byte *resultsArray, void **args, unsigned int argsCount, unsign
 		FIO1DIR = FIO1DIR & ~ultrasoundMask;
 	EI
 
-	expiryTime += USEC(38000L);	// we allow everything up to 38 msec to 
+	expiryTime += USEC(38000L);	// we allow everything up to 38 msec to run
 	samplingMasks[1] |= ultrasoundMask;	// start waiting for ultrasound value.
 
 	while (!expired(expiryTime) && remainingToCapture)
@@ -286,40 +285,27 @@ int acquire_data(byte *resultsArray, void **args, unsigned int argsCount, unsign
 	}
 
 	// finish processing.
-	for (i = 0; i<INFRARED_COUNT;i++)
+	for (i = 0; i < INFRARED_COUNT;i++)
 	{
 		j = irMap[i];
 		if (sampling[j] != WAIT_COMPLETED) *results++ = 0;
 		else
 		{
 			expiryTime = endTimes[j] - startTimes[j];
-			*results++ = expiryTime/ CARRIER_PERIOD_TICKS;
+			*results++ = expiryTime / CARRIER_PERIOD_TICKS;
 		}
 	}
 
-	for (i=0;i<ULTRASOUND_COUNT;i++)
+	for (i = 0; i < ULTRASOUND_COUNT; i++)
 	{
 		j = usoundMap[i];
 		if (sampling[j] != WAIT_COMPLETED) *results++ = 255;
 		else
 		{
 			expiryTime = endTimes[j] - startTimes[j];
-			*results++ = (byte)
-				(expiryTime * speedOfSound * CM_PER_METER / TICKS_PER_S / 2);
+			*results++ = (byte) (expiryTime * speedOfSound * CM_PER_METER / TICKS_PER_S / 2);
 		}
 	}
 
 	return 0;
-}
-#endif
-
-
-int Acquire_test(unsigned long  *generalArray, void **args, unsigned int argsCount, unsigned int *argSize)
-{
-	int t0 = T0TC;
-	unsigned long expiryTime = t0 + USEC(20);	// stash expiry time.
-
-	while (!expired(expiryTime));
-	
-	return T0TC - t0;
 }

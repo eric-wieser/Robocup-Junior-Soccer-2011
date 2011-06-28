@@ -36,12 +36,13 @@ namespace Technobotts
         [System.SerializableAttribute()]
         internal enum StringResources : short
         {
-            String1 = 1228,
+            UserID = 1788,
         }
         [System.SerializableAttribute()]
         internal enum BinaryResources : short
         {
             SensorPoller = 14217,
+            Key = 14319,
         }
     }
 }

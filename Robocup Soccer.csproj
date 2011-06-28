@@ -29,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.RLPTest</StartupObject>
+    <StartupObject>Technobotts.Tests.DriveTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -102,9 +102,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Native code\Makefile" />
+    <None Include="Native code\RLP_LinkScript.lds" />
+    <None Include="Resources\Key.dat" />
     <None Include="Resources\SensorPoller.elf" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RLP_test1.c" />
+    <Content Include="Native code\lpc23xx.h" />
+    <Content Include="Native code\RLP.h" />
+    <Content Include="Native code\SensorPoller.c" />
   </ItemGroup>
 </Project>
