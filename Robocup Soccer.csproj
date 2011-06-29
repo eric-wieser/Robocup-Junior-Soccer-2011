@@ -29,13 +29,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.BallFollowTest</StartupObject>
+    <StartupObject>Technobotts.Tests.PIDTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="Hardware\Button.cs" />
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
     <Compile Include="Hardware\I2CException.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Tests\IRDetectorTest.cs" />
     <Compile Include="Tests\IRRingTest.cs" />
     <Compile Include="Tests\LaserTest.cs" />
+    <Compile Include="Tests\PIDTest.cs" />
     <Compile Include="Tests\RLPTest.cs" />
     <Compile Include="Tests\RTCTest.cs" />
     <Compile Include="Tests\SolenoidTest.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />
     <Compile Include="Utilities\Range.cs" />
+    <Compile Include="Utilities\SystemTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL">

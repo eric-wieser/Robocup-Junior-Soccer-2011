@@ -2,6 +2,7 @@
 
 using System;
 using Math = System.Math;
+using Button = Technobotts.Hardware.Button;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using Technobotts.Geometry;
@@ -13,7 +14,7 @@ using Technobotts.Hardware;
 
 namespace Technobotts.Soccer
 {
-	public class Robot
+	public class Robot : IDisposable
 	{
 		public IntensityDetectorArray BallDetector;
 		public IMotor MotorA;
@@ -22,7 +23,7 @@ namespace Technobotts.Soccer
 
 		public HolonomicDrive Drive;
 		public Solenoid Kicker;
-		public InputPort Button;
+		public Button Button;
 		public AngleFinder Compass;
 		public LightGate LightGate;
 
@@ -72,11 +73,21 @@ namespace Technobotts.Soccer
 
 			BallDetector = IntensityDetectorArray.FromRadialSensors(SensorPoller.IRSensors);
 
-			Button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
+			Button = new Button(FEZ_Pin.Digital.LDR);
 
 			Compass = new HMC6352();
 
 			LightGate = new LightGate(FEZ_Pin.AnalogIn.An0, 350, 160);
+		}
+
+		public void Dispose()
+		{
+			Drive.Dispose();
+			LightGate.Dispose();
+			Kicker.Dispose();
+			Button.Dispose();
+			LightGate.Dispose();
+			SensorPoller.Dispose();
 		}
 	}
 }

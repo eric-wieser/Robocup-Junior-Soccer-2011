@@ -13,23 +13,13 @@ namespace Technobotts.Tests
 {
 	class DriveTest
 	{
-		static InputPort button;
-
-		public static void waitForButton(int time = 200)
-		{
-			while (button.Read()) ;
-			Thread.Sleep(time);
-			while (!button.Read()) ;
-		}
-
 		public static void Main()
 		{
-			Robot r = new Robot();
 			int angle = 0;
-			button = r.Button;
 
-			r.Drive.Stop();
-			waitForButton();
+			Robot r = new Robot();
+			r.Button.WaitForPress();
+
 			while (true)
 			{
 				r.Drive.DriveVelocity = Vector.FromPolarCoords(2, System.Math.PI * angle / 3);

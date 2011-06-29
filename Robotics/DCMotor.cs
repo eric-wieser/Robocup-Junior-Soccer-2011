@@ -90,7 +90,7 @@ namespace Technobotts.Robotics
 
 		private void setPWM(double dutyCycle)
 		{
-			if (dutyCycle == 1)
+			if (dutyCycle >= 1)
 				_pwm.Set(true);
 			else
 				_pwm.Set(pwmFrequency, (byte)(dutyCycle * 100));

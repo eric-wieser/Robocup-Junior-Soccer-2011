@@ -14,8 +14,7 @@ namespace Technobotts.Tests
 		public static void Main()
 		{
 			Robot r = new Robot();
-			while (!r.Button.Read()) ;
-			while (r.Button.Read()) ;
+			r.Button.WaitForPress();
 			double startHeading = r.Compass.Angle;
 			while (true)
 			{

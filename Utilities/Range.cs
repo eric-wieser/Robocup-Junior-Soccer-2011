@@ -5,6 +5,10 @@ namespace Technobotts.Utilities
 {
 	public class Range
 	{
+		public static readonly Range Infinite = new Range();
+		public static readonly Range Angle = new Range(0, 2 * System.Math.PI);
+		public static readonly Range SignedAngle = new Range(-System.Math.PI, System.Math.PI);
+
 		public double Max { get; private set; }
 		public double Min { get; private set; }
 		public double Span { get { return Max - Min; } }
@@ -53,6 +57,15 @@ namespace Technobotts.Utilities
 		public bool IsFinite()
 		{
 			return Min != DoubleEx.NegativeInfinity && Max != DoubleEx.PositiveInfinity;
+		}
+
+		public static Range operator *(Range r, double d)
+		{
+			return new Range(r.Min * d, r.Max * d);
+		}
+		public static Range operator /(Range r, double d)
+		{
+			return new Range(r.Min / d, r.Max / d);
 		}
 	}
 }

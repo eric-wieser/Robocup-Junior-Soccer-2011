@@ -4,32 +4,30 @@ using GHIElectronics.NETMF.System;
 
 namespace Technobotts.Robotics.Navigation
 {
-	public class HolonomicDrive
+	public class HolonomicDrive : IDisposable
 	{
 		public class Wheel
 		{
 			public const double MaxSpeed = 1;
 
-			public Vector position;
-			private Matrix transformMatrix;
-			private IMotor motor;
+			public Vector Position {get; private set;}
+			public Matrix TransformMatrix { get; private set; }
+			public IMotor Motor { get; private set; }
 
 			public Wheel(Vector position, Vector driveAxis, Vector rollAxis, IMotor motor)
 				: this(position,  Matrix.FromCoordinateAxes(driveAxis, rollAxis), motor) { }
 
 			public Wheel(Vector position, Matrix transformMatrix, IMotor motor)
 			{
-				this.position = position;
+				Position = position;
 
-				this.motor = motor;
-				motor.NeutralMode = NeutralMode.Brake;
+				Motor = motor;
+				Motor.NeutralMode = NeutralMode.Brake;
 
-				this.transformMatrix = transformMatrix;
+				TransformMatrix = transformMatrix;
 			}
 
-
 			public double TargetSpeed { get; set; }
-
 
 			//private Vector v;
 			public Vector TargetVector
@@ -38,14 +36,14 @@ namespace Technobotts.Robotics.Navigation
 				set
 				{
 					//v = value;
-					Vector wheelVector = transformMatrix.Inverse * value;
+					Vector wheelVector = TransformMatrix.Inverse * value;
 					TargetSpeed = wheelVector.X;
 				}
 			}
 
 			public void Update()
 			{
-				motor.Speed = TargetSpeed;
+				Motor.Speed = TargetSpeed;
 			}
 		}
 
@@ -84,7 +82,7 @@ namespace Technobotts.Robotics.Navigation
 		{
 			foreach (Wheel wheel in Wheels)
 			{
-				wheel.TargetVector = DriveVelocity + (wheel.position - RotationPoint).Perpendicular * TurnVelocity;
+				wheel.TargetVector = DriveVelocity + (wheel.Position - RotationPoint).Perpendicular * TurnVelocity;
 			}
 
 			normalize();
@@ -119,6 +117,15 @@ namespace Technobotts.Robotics.Navigation
 		public void Stop()
 		{
 			DriveVelocity = Vector.Zero;
+		}
+
+		public void Dispose()
+		{
+			foreach (Wheel wheel in Wheels)
+			{
+				IDisposable motor = wheel.Motor as IDisposable;
+				if (motor != null) motor.Dispose();
+			}
 		}
 	}
 }

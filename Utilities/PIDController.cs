@@ -11,40 +11,55 @@ namespace Technobotts.Utilities
 	{
 		public const double DefaultPeriod = .05;
 
-		public interface IInput
+		public class InputFunction
 		{
-			Range Range { get; }
-			double Value { get; }
-		}
-		public interface IOutput
-		{
-			Range Range { get; }
-			double Value { set; }
-		}
+			public delegate double Getter();
 
+			public InputFunction(Getter getter, Range range = null)
+			{
+				Range = range == null ? Range.Infinite : range;
+				Get = getter;
+			}
+
+			public Getter Get { get; private set; }
+			public Range Range { get; private set; }
+		}
+		public class OutputFunction
+		{
+			public delegate void Setter(double value);
+
+			public OutputFunction(Setter setter, Range range = null)
+			{
+				Range = range == null ? Range.Infinite : range;
+				Set = setter;
+			}
+
+			public Setter Set { get; private set; }
+			public Range Range { get; private set; }
+		}
 		public double P { get; private set; }
 		public double I { get; private set; }
 		public double D { get; private set; }
 		public double Period { get; private set; }
 
-		private IOutput _output;
-		public IOutput Output {
+		private OutputFunction _output;
+		public OutputFunction Output {
 			get { return _output; }
 			
 			[MethodImpl(MethodImplOptions.Synchronized)]
-			private set {
+			set {
 				_output = value;
 				Enabled = Enabled;
 				SetPoint = SetPoint;
 			}
 		}
-		private IInput _input;
-		public IInput Input
+		private InputFunction _input;
+		public InputFunction Input
 		{
 			get { return _input; }
 			
 			[MethodImpl(MethodImplOptions.Synchronized)]
-			private set
+			set
 			{
 				_input = value;
 				Enabled = Enabled;
@@ -78,9 +93,7 @@ namespace Technobotts.Utilities
 		public bool Enabled
 		{
 			get { return _enabled; }
-			
-			[MethodImpl(MethodImplOptions.Synchronized)]
-			set { _enabled = value && Output != null && Input != null; }
+			set { if (Output != null && Input != null) lock (Output) { _enabled = value; } }
 		}
 
 		public double Error { get; private set; }
@@ -124,39 +137,42 @@ namespace Technobotts.Utilities
 
 			if (Enabled)
 			{
-				double result;
-				lock (this)
+				lock (Output)
 				{
-					//Handle continuity
-					double error = SetPoint - Input.Value;
-					if (Continuous)
+					double result;
+					lock (this)
 					{
-						double inputRange = Input.Range.Span;
-						while (error > inputRange / 2)
-							error -= inputRange;
-						while (error < -inputRange / 2)
-							error += inputRange;
+						//Handle continuity
+						double error = SetPoint - Input.Get();
+						if (Continuous)
+						{
+							double inputRange = Input.Range.Span;
+							while (error > inputRange / 2)
+								error -= inputRange;
+							while (error < -inputRange / 2)
+								error += inputRange;
+						}
+						Error = error;
+
+						//Handle integral part overflow
+						double newTotal = TotalError + Error;
+						if (Output.Range.Contains(newTotal * I))
+							TotalError = newTotal;
+
+						//Calcate PID output
+						result =
+							P * Error +
+							I * TotalError * Period +
+							D * (Error - PrevError) / Period;
+
+						//Normalize to within max and min output
+						result = Output.Range.Clip(result);
+
+						PrevError = Error;
 					}
-					Error = error;
 
-					//Handle integral part overflow
-					double newTotal = TotalError + Error;
-					if (Output.Range.Contains(newTotal * I))
-						TotalError = newTotal;
-
-					//Calcate PID output
-					result =
-						P * Error +
-						I * TotalError * Period +
-						D * (Error - PrevError) / Period;
-
-					//Normalize to within max and min output
-					result = Output.Range.Clip(result);
-
-					PrevError = Error;
+					Output.Set(result);
 				}
-
-				Output.Value = result;
 			}
 		}
 

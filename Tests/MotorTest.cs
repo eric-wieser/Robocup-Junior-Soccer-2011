@@ -18,8 +18,7 @@ namespace Technobotts.Tests
 			double i = 0;
 			double step = System.Math.PI / 16;
 
-			while (!r.Button.Read()) ;
-			while (r.Button.Read()) ;
+			r.Button.WaitForPress();
 
 			while (true)
 			{
