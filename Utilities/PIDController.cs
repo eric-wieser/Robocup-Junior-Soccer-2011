@@ -75,7 +75,7 @@ namespace Technobotts.Utilities
 			{
 				if (Input != null)
 				{
-					_setPoint = Input.Range.Clip(value);
+					_setPoint = Continuous ? Input.Range.Wrap(value) : Input.Range.Clip(value);
 				}
 				else
 					_setPoint = value;
@@ -93,7 +93,7 @@ namespace Technobotts.Utilities
 		public bool Enabled
 		{
 			get { return _enabled; }
-			set { if (Output != null && Input != null) lock (Output) { _enabled = value; } }
+			set { if (value != _enabled && Output != null && Input != null) lock (Output) { _enabled = value; } }
 		}
 
 		public double Error { get; private set; }
@@ -119,21 +119,26 @@ namespace Technobotts.Utilities
 			Reset();
 		}
 
-		public static PIDController FromZieglerNicholsMethod(double criticalP, double oscillationPeriod, string type = "PID")
+		public PIDController(double[] k, double period = DefaultPeriod) : this(k[0], k[1], k[2], period) { }
+
+		public static double[] CoefficientsFromZieglerNicholsMethod(double criticalP, double oscillationPeriod, string type = "PID")
 		{
 			switch (type)
 			{
 				case "P":
-					return new PIDController(0.5 * criticalP);
+					return new double[] {0.5 * criticalP, 0, 0};
 				case "PI":
-					return new PIDController(
+					return new double[] {
 						0.45 * criticalP,
-						1.2 * criticalP / oscillationPeriod);
+						1.2 * criticalP / oscillationPeriod,
+						0
+					};
 				case "PID":
-					return new PIDController(
+					return new double[] {
 						0.60 * criticalP,
 						2 * criticalP / oscillationPeriod,
-						criticalP * oscillationPeriod / 8);
+						criticalP * oscillationPeriod / 8
+					};
 				default:
 					throw new ArgumentException(
 						"Not a valid PID type: must be one of P, PI, or PID",

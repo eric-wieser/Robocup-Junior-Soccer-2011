@@ -42,21 +42,5 @@ namespace Technobotts.Hardware
 		{
 			get { return base.Period; }
 		}
-
-		public static void Main()
-		{
-			PinCapture sensor = new PinCapture((Cpu.Pin)FEZ_Pin.Digital.Di0, Port.ResistorMode.PullUp);
-			uint[] data = new uint[256];
-			bool state = true;
-			long time = 0;
-			int count = sensor.Read(state, data, 0, data.Length, 2000);
-			for (int i = 0; i < count; i++)
-			{
-				Debug.Print(time + "\t" + (state ? 1 : 0));
-				time += data[i];
-				Debug.Print(time + "\t" + (state ? 1 : 0));
-				state = !state;
-			}
-		}
 	}
 }

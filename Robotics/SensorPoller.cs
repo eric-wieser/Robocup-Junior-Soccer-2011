@@ -48,7 +48,7 @@ namespace Technobotts.Robotics
 		public IRangeFinder[] USSensors;
 		public IIntensityDetector[] IRSensors;
 
-		private RLP.Procedure _dataProcedure;
+		private static RLP.Procedure _dataProcedure;
 		private byte[] _dataBuffer = new byte[20];
 
 		private void InitRLP()
@@ -76,6 +76,12 @@ namespace Technobotts.Robotics
 
 		public SensorPoller()
 		{
+			if (_dataProcedure == null)
+			{
+				InitRLP();
+				_dataProcedure = GetDataProcedure();
+			}
+
 			USSensors = new IRangeFinder[USDetectorPins.Length];
 			for (int i = 0; i < USSensors.Length; i++)
 			{
@@ -87,9 +93,6 @@ namespace Technobotts.Robotics
 			{
 				IRSensors[i] = new NativeIRSensor(IRDetectorPins[i]);
 			}
-
-			InitRLP();
-			_dataProcedure = GetDataProcedure();
 		}
 
 		public void Poll()
@@ -99,6 +102,17 @@ namespace Technobotts.Robotics
 				((NativeIRSensor) IRSensors[i]).Intensity = _dataBuffer[i];
 			for (int i = 0; i < USSensors.Length; i++)
 				((NativeUSSensor)USSensors[i]).DistanceCM = _dataBuffer[i + IRSensors.Length];
+		}
+
+		public int ActiveIRSensorCount
+		{
+			get
+			{
+				int i = 0;
+				foreach (IIntensityDetector ir in IRSensors)
+					if (ir.Intensity != 0) i++;
+				return i;
+			}
 		}
 
 		public void Dispose()

@@ -29,10 +29,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.PIDTest</StartupObject>
+    <StartupObject>Technobotts.Tests.BallFollowPIDTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
+    <Compile Include="CompassSweeper.cs" />
     <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
@@ -44,6 +45,7 @@
     <Compile Include="Hardware\SyncedUltrasonicSensors.cs" />
     <Compile Include="Hardware\TechnobottsRTC.cs" />
     <Compile Include="Hardware\UltrasonicSensor2.cs" />
+    <Compile Include="IRActuallyPluggedIn.cs" />
     <Compile Include="LaserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Soccer\Robot.cs" />
     <Compile Include="Tests\BallFollowTest.cs" />
     <Compile Include="Tests\CompassTest.cs" />
+    <Compile Include="Tests\BallFollowPIDTest.cs" />
     <Compile Include="Tests\DriveTest.cs" />
     <Compile Include="Tests\HelloWorld.cs" />
     <Compile Include="Tests\IRDetectorTest.cs" />

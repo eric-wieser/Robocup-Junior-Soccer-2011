@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Robocup_Soccer")]
+[assembly: AssemblyTitle("Robocup Soccer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Robocup_Soccer")]
+[assembly: AssemblyProduct("Robocup Soccer")]
 [assembly: AssemblyCopyright("Copyright © Technobotts 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
