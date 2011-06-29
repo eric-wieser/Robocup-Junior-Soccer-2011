@@ -1,3 +1,7 @@
+//#define P
+#define PI
+//#define PID
+
 using System;
 using Microsoft.SPOT;
 using Technobotts.Utilities;
@@ -12,7 +16,10 @@ namespace Technobotts.Tests
 		{
 			using (Robot r = new Robot())
 			{
-				pid = new PIDController(0.75, 0.1);
+				//pid = new PIDController(0.75, 0.1, 0.005);
+				//Ziegler-Nichols method
+				pid = PIDController.FromZieglerNicholsMethod(1.15, 0.87);
+
 				pid.Input = new PIDController.InputFunction(
 					() => r.Compass.Angle,
 					Range.Angle

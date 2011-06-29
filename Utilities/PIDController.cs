@@ -119,6 +119,28 @@ namespace Technobotts.Utilities
 			Reset();
 		}
 
+		public static PIDController FromZieglerNicholsMethod(double criticalP, double oscillationPeriod, string type = "PID")
+		{
+			switch (type)
+			{
+				case "P":
+					return new PIDController(0.5 * criticalP);
+				case "PI":
+					return new PIDController(
+						0.45 * criticalP,
+						1.2 * criticalP / oscillationPeriod);
+				case "PID":
+					return new PIDController(
+						0.60 * criticalP,
+						2 * criticalP / oscillationPeriod,
+						criticalP * oscillationPeriod / 8);
+				default:
+					throw new ArgumentException(
+						"Not a valid PID type: must be one of P, PI, or PID",
+						"type");
+			}
+		}
+
 		public void Dispose()
 		{
 			_controlLoop.Dispose();
@@ -144,6 +166,7 @@ namespace Technobotts.Utilities
 					{
 						//Handle continuity
 						double error = SetPoint - Input.Get();
+						if (DoubleEx.IsNaN(error)) return;
 						if (Continuous)
 						{
 							double inputRange = Input.Range.Span;
