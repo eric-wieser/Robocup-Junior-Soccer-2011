@@ -6,6 +6,7 @@ using Technobotts.Robotics;
 using GHIElectronics.NETMF.FEZ;
 using Technobotts.Geometry;
 using Technobotts.Utilities;
+using Technobotts.Hardware;
 
 namespace Technobotts.Tests
 {
@@ -20,11 +21,11 @@ namespace Technobotts.Tests
 				FEZ_Pin.Digital.Di48, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di51
 			};
 
-			IIntensityDetector[] detectors = new IRDetector[pins.Length];
+			IIntensityDetector[] detectors = new TSOP1138[pins.Length];
 
 			for (int i = 0; i < pins.Length; i++)
 			{
-				detectors[i] = new IRDetector((Cpu.Pin)pins[i]);
+				detectors[i] = new TSOP1138((Cpu.Pin)pins[i]);
 			}
 
 			IntensityDetectorArray sensors = IntensityDetectorArray.FromRadialSensors(detectors);

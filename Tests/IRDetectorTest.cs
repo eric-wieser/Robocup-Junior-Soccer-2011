@@ -5,12 +5,13 @@ using Technobotts.Robotics;
 using GHIElectronics.NETMF.Hardware;
 using GHIElectronics.NETMF.FEZ;
 using System.Threading;
+using Technobotts.Hardware;
 
 namespace Technobotts.Tests
 {
 	class IRDetectorTest
 	{
-		static IRDetector sensor = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di26);
+		static TSOP1138 sensor = new TSOP1138((Cpu.Pin)FEZ_Pin.Digital.Di26);
 		static double getReading(int count = 10)
 		{
 			int reading = 0;

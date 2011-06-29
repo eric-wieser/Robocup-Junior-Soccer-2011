@@ -4,14 +4,15 @@ using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.FEZ;
 using Technobotts.Hardware;
 using GHIElectronics.NETMF.Hardware;
+using Technobotts.Robotics;
 
-namespace Technobotts.Robotics
+namespace Technobotts.Hardware
 {
-	class IRDetector : PwmIn, IIntensityDetector
+	class TSOP1138 : PwmIn, IIntensityDetector
 	{
 		public const int CarrierFrequency = 40; //kHz
 		new public int Period = 833;
-		public IRDetector(Cpu.Pin pin) : base(pin, 2) { }
+		public TSOP1138(Cpu.Pin pin) : base(pin, 2) { }
 		public int Intensity
 		{
 			get

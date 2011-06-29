@@ -16,23 +16,25 @@ namespace Technobotts.Tests
 			Robot r = new Robot();
 			while (!r.Button.Read()) ;
 			while (r.Button.Read()) ;
-
+			double startHeading = r.Compass.Angle;
 			while (true)
 			{
 				r.SensorPoller.Poll();
 				Vector raw = r.BallDetector.Get();
 				Vector filtered = filter.apply(r.BallDetector.Get());
 
-				double headingError = HeadingRange.Wrap(r.Compass.Angle);
+				double headingError = HeadingRange.Wrap(r.Compass.Angle - startHeading);
 
 				Debug.Print((headingError / Math.PI).ToString("f1"));
 
 				if (r.LightGate.IsObstructed)
 				{
-					r.Drive.RotationPoint = Vector.J * 150;
+					r.Drive.RotationPoint = Vector.I * 250;
 					r.Drive.DriveVelocity = 0;
-
-					r.Drive.TurnVelocity = 1;
+					r.Drive.TurnVelocity = -3;
+					Thread.Sleep(500);
+					r.Drive.TurnVelocity = 0;
+					Thread.Sleep(500);
 				}
 				else
 				{
@@ -40,9 +42,8 @@ namespace Technobotts.Tests
 
 					r.Drive.DriveVelocity = 20 * filtered;
 					r.Drive.TurnVelocity = 0.5 * headingError;
+					Thread.Sleep(10);
 				}
-
-				Thread.Sleep(10);
 			}
 		}
 	}

@@ -15,8 +15,8 @@ namespace Technobotts
 	{
 		public static void Main()
 		{
-			IRDetector sensor = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di0);
-			IRDetector sensorShielded = new IRDetector((Cpu.Pin)FEZ_Pin.Digital.Di1);
+			TSOP1138 sensor = new TSOP1138((Cpu.Pin)FEZ_Pin.Digital.Di0);
+			TSOP1138 sensorShielded = new TSOP1138((Cpu.Pin)FEZ_Pin.Digital.Di1);
 				/*
 			UltrasonicSensor us = new UltrasonicSensor((Cpu.Pin) FEZ_Pin.Digital.Di0);
 			while (true)
