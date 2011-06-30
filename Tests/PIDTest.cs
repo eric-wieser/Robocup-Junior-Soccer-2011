@@ -19,6 +19,7 @@ namespace Technobotts.Tests
 				//pid = new PIDController(0.75, 0.1, 0.005);
 
 				pid = new PIDController(PIDController.CoefficientsFromZieglerNicholsMethod(1.15, 0.87))
+				//pid = new PIDController(1.15)
 				{
 					Input = new PIDController.InputFunction(
 						() => r.Compass.Angle,

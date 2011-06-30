@@ -37,6 +37,7 @@
     <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="Goalie.cs" />
     <Compile Include="Hardware\Button.cs" />
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />

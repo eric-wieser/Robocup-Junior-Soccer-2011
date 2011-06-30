@@ -31,17 +31,17 @@ namespace Technobotts.Soccer
 
 		public class LEDGroup
 		{
-			public LED White;
+			public LED Purple;
 			public LED Orange;
 			public LED Green;
-			public LED Purple;
+			public LED White;
 
-			public LEDGroup(FEZ_Pin.Digital white, FEZ_Pin.Digital orange, FEZ_Pin.Digital green, FEZ_Pin.Digital purple)
+			public LEDGroup(FEZ_Pin.Digital purple, FEZ_Pin.Digital orange, FEZ_Pin.Digital green, FEZ_Pin.Digital white)
 			{
-				White = new LED( white);
-				Orange = new LED(orange);
-				Green = new LED(green);
-				Purple = new LED(purple);
+				Purple = new LED(purple); //3.2-3.8V, 30mA => < 100 Ohms
+				Orange = new LED(orange); //1.8-2.2V, 30mA => 37-50 ohms
+				Green = new LED(green); //2.8-3V, 20mA => 15-25 ohms
+				White = new LED(white); //3.5V, 20mA ????
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace Technobotts.Soccer
 				)
 			);
 
-			Kicker = new Solenoid(PWM.Pin.PWM5);
+			//Kicker = new Solenoid(PWM.Pin.PWM5);
 
 			BallDetector = IntensityDetectorArray.FromRadialSensors(SensorPoller.IRSensors);
 

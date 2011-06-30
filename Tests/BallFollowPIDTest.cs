@@ -5,6 +5,7 @@ using Technobotts.Soccer;
 using System.Threading;
 using Technobotts.Utilities;
 using Technobotts.Geometry;
+using Technobotts.Robotics;
 namespace Technobotts.Tests
 {
 	class BallFollowPIDTest
@@ -51,11 +52,26 @@ namespace Technobotts.Tests
 				}
 				else
 				{
+					Vector direction = 20 * filtered;
+					IRangeFinder[] sensors = r.SensorPoller.USSensors;
+
+					if(direction.Y > 0 && sensors[0].DistanceCM < 30)
+						direction = new Vector(direction.X, -5);
+					else if (direction.Y < 0 && sensors[2].DistanceCM < 30)
+						direction = new Vector(direction.X, 5);
+
+					if (direction.X > 0 && sensors[1].DistanceCM < 20)
+						direction = new Vector(-5, direction.Y);
+					else if (direction.X < 0 && sensors[3].DistanceCM < 20)
+						direction = new Vector(-5, direction.Y);
+
 					r.Drive.RotationPoint = 0;
 
-					r.Drive.DriveVelocity = 20 * filtered;
+					r.Drive.DriveVelocity = direction;
 					Thread.Sleep(10);
 				}
+
+				Debug.Print("" + r.Drive.TurnVelocity);
 			}
 		}
 	}

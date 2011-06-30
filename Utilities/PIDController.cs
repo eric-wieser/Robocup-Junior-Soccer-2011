@@ -74,11 +74,13 @@ namespace Technobotts.Utilities
 			set
 			{
 				if (Input != null)
-				{
 					_setPoint = Continuous ? Input.Range.Wrap(value) : Input.Range.Clip(value);
-				}
 				else
 					_setPoint = value;
+
+				PrevError = Input.Get();
+
+
 			}
 		}
 
@@ -211,10 +213,9 @@ namespace Technobotts.Utilities
 							TotalError = newTotal;
 
 						//Calcate PID output
-						result =
-							P * Error +
-							I * TotalError * Period +
-							D * (Error - PrevError) / Period;
+						result = P * Error;
+						result += I * TotalError * Period;
+						result +=  D * (DoubleEx.IsNaN(PrevError) ? 0 : (Error - PrevError)) / Period;
 
 						//Normalize to within max and min output
 						result = Output.Range.Clip(result);
@@ -249,11 +250,10 @@ namespace Technobotts.Utilities
 			}
 		}
 
-		///<summary>Reset the previous error and the integral term, and disables the controller</summary>
+		///<summary>Reset the previous error and the integral term</summary>
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Reset()
 		{
-			Enabled = false;
 			Error = 0;
 			PrevError = 0;
 			TotalError = 0;

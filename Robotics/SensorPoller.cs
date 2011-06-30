@@ -62,6 +62,7 @@ namespace Technobotts.Robotics
 
 		private static RLP.Procedure GetDataProcedure()
 		{
+			Debug.GC(true);
 			byte[] elf_file = Resources.GetBytes(Resources.BinaryResources.SensorPoller);
 			RLP.LoadELF(elf_file);
 			RLP.InitializeBSSRegion(elf_file);
