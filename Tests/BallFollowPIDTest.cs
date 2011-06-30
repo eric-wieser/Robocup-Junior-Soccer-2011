@@ -56,14 +56,14 @@ namespace Technobotts.Tests
 					IRangeFinder[] sensors = r.SensorPoller.USSensors;
 
 					if(direction.Y > 0 && sensors[0].DistanceCM < 30)
-						direction = new Vector(direction.X, -5);
+						direction = new Vector(direction.X, -25);
 					else if (direction.Y < 0 && sensors[2].DistanceCM < 30)
-						direction = new Vector(direction.X, 5);
+						direction = new Vector(direction.X, 25);
 
 					if (direction.X > 0 && sensors[1].DistanceCM < 20)
-						direction = new Vector(-5, direction.Y);
+						direction = new Vector(-25, direction.Y);
 					else if (direction.X < 0 && sensors[3].DistanceCM < 20)
-						direction = new Vector(-5, direction.Y);
+						direction = new Vector(25, direction.Y);
 
 					r.Drive.RotationPoint = 0;
 
