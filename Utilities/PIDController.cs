@@ -121,27 +121,50 @@ namespace Technobotts.Utilities
 
 		public PIDController(double[] k, double period = DefaultPeriod) : this(k[0], k[1], k[2], period) { }
 
-		public static double[] CoefficientsFromZieglerNicholsMethod(double criticalP, double oscillationPeriod, string type = "PID")
+		public enum ZieglerNicholsType {
+			P, PI, PID, SomeOvershoot, NoOvershoot, PessenIntegralRule
+		}
+
+		public static double[] CoefficientsFromZieglerNicholsMethod(double criticalP, double oscillationPeriod, ZieglerNicholsType type = ZieglerNicholsType.PID)
 		{
 			switch (type)
 			{
-				case "P":
+				case ZieglerNicholsType.P:
 					return new double[] {0.5 * criticalP, 0, 0};
-				case "PI":
+				case ZieglerNicholsType.PI:
 					return new double[] {
 						0.45 * criticalP,
 						1.2 * criticalP / oscillationPeriod,
 						0
 					};
-				case "PID":
+				case ZieglerNicholsType.PID:
 					return new double[] {
 						0.60 * criticalP,
 						2 * criticalP / oscillationPeriod,
 						criticalP * oscillationPeriod / 8
 					};
+				case ZieglerNicholsType.PessenIntegralRule:
+					return new double[] {
+						0.70 * criticalP,
+						2.5 * criticalP / oscillationPeriod,
+						0.15 * criticalP * oscillationPeriod
+					};
+				case ZieglerNicholsType.SomeOvershoot:
+					return new double[] {
+						0.33 * criticalP,
+						2 * criticalP / oscillationPeriod,
+						criticalP * oscillationPeriod / 3
+					};
+				case ZieglerNicholsType.NoOvershoot:
+					return new double[] {
+						0.20 * criticalP,
+						2 * criticalP / oscillationPeriod,
+						criticalP * oscillationPeriod / 3
+					};
+
 				default:
 					throw new ArgumentException(
-						"Not a valid PID type: must be one of P, PI, or PID",
+						"Not a valid PID type",
 						"type");
 			}
 		}
