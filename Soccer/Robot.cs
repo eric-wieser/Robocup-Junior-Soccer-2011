@@ -29,6 +29,24 @@ namespace Technobotts.Soccer
 
 		public SensorPoller SensorPoller;
 
+		public class LEDGroup
+		{
+			public LED White;
+			public LED Orange;
+			public LED Green;
+			public LED Purple;
+
+			public LEDGroup(FEZ_Pin.Digital white, FEZ_Pin.Digital orange, FEZ_Pin.Digital green, FEZ_Pin.Digital purple)
+			{
+				White = new LED( white);
+				Orange = new LED(orange);
+				Green = new LED(green);
+				Purple = new LED(purple);
+			}
+		}
+
+		public LEDGroup LEDs;
+
 		public Robot()
 		{
 			SensorPoller = new SensorPoller();
@@ -37,20 +55,15 @@ namespace Technobotts.Soccer
 				MotorB = new FakeMotor{Name = "B"};
 				MotorC = new FakeMotor{Name = "C"};
 			#else
-			DCMotor.SpeedToPWMFunction s = DCMotor.Characteristic.Linear;
-			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29)
-			{ SpeedCharacteristic = s };
+			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
 
-			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31)
-			{ SpeedCharacteristic = s };
-
-			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33)
-			{ SpeedCharacteristic = s };
 			#endif
 
+			Matrix wheelMatrix = new Matrix(-60 * Math.PI, 0, 0, 12 * Math.PI);
+			Vector wheelPosition = Vector.J * 95;
 
-				Matrix wheelMatrix = new Matrix(-60 * Math.PI, 0, 0, 12 * Math.PI);
-				Vector wheelPosition = Vector.J * 95;
 			Drive = new HolonomicDrive(
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
@@ -78,6 +91,27 @@ namespace Technobotts.Soccer
 			Compass = new HMC6352();
 
 			LightGate = new LightGate(FEZ_Pin.AnalogIn.An0, 350, 160);
+
+			
+			LEDs = new LEDGroup(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di5, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di7);
+		}
+
+		public void ShowDiagnostics()
+		{
+			int brokenIRCount = SensorPoller.BrokenIRSensorCount;
+
+			if (brokenIRCount > 12)
+				LEDs.Orange.State = false;
+			if (brokenIRCount > 8)
+				LEDs.Orange.StartBlinking(500, 0.25);
+			else if (brokenIRCount > 4)
+				LEDs.Orange.StartBlinking(500, 0.5);
+			else if (brokenIRCount > 0)
+				LEDs.Orange.StartBlinking(500, 0.75);
+			if (brokenIRCount == 0)
+				LEDs.Orange.State = true;
+
+			LEDs.Green.State = LightGate.IsObstructed;
 		}
 
 		public void Dispose()

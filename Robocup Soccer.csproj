@@ -41,6 +41,7 @@
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
     <Compile Include="Hardware\I2CException.cs" />
+    <Compile Include="Hardware\LED.cs" />
     <Compile Include="Hardware\LightGate.cs" />
     <Compile Include="Hardware\SyncedUltrasonicSensors.cs" />
     <Compile Include="Hardware\TechnobottsRTC.cs" />

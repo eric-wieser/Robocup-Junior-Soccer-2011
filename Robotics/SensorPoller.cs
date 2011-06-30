@@ -104,13 +104,13 @@ namespace Technobotts.Robotics
 				((NativeUSSensor)USSensors[i]).DistanceCM = _dataBuffer[i + IRSensors.Length];
 		}
 
-		public int ActiveIRSensorCount
+		public int BrokenIRSensorCount
 		{
 			get
 			{
 				int i = 0;
 				foreach (IIntensityDetector ir in IRSensors)
-					if (ir.Intensity != 0) i++;
+					if (ir.Intensity == 0) i++;
 				return i;
 			}
 		}
