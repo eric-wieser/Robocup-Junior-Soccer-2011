@@ -4,7 +4,7 @@ using GHIElectronics.NETMF.System;
 using Technobotts.Geometry;
 namespace Technobotts.Utilities
 {
-	class LowPassVectorFilter
+	public class LowPassVectorFilter
 	{
 		private bool initialized = false;
 

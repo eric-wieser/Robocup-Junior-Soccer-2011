@@ -21,7 +21,7 @@ namespace Technobotts.Soccer
 		public IMotor MotorB;
 		public IMotor MotorC;
 
-		public HolonomicDrive Drive;
+		public ControlledHolonomicDrive Drive;
 		public Solenoid Kicker;
 		public Button Button;
 		public AngleFinder Compass;
@@ -31,10 +31,27 @@ namespace Technobotts.Soccer
 
 		public class LEDGroup
 		{
-			public LED Purple;
-			public LED Orange;
-			public LED Green;
-			public LED White;
+			public LED Purple {get; private set;}
+			public LED Orange { get; private set; }
+			public LED Green { get; private set; }
+			public LED White { get; private set; }
+
+			public LED LaserIndicator { get { return Purple; } }
+			public LED IRIndicator { get { return Orange; } }
+			public LED ModeIndicator { get { return Green; } }
+			public LED Other { get { return White; } }
+
+
+
+			public bool State { set { Purple.State = Orange.State = Green.State = White.State = value; } }
+
+			public void StartBlinking(int period, double dutyCycle)
+			{
+				Purple.StartBlinking(period, dutyCycle);
+				Orange.StartBlinking(period, dutyCycle);
+				Green.StartBlinking(period, dutyCycle);
+				White.StartBlinking(period, dutyCycle);
+			}
 
 			public LEDGroup(FEZ_Pin.Digital purple, FEZ_Pin.Digital orange, FEZ_Pin.Digital green, FEZ_Pin.Digital white)
 			{
@@ -64,7 +81,9 @@ namespace Technobotts.Soccer
 			Matrix wheelMatrix = new Matrix(-60 * Math.PI, 0, 0, 12 * Math.PI);
 			Vector wheelPosition = Vector.J * 95;
 
-			Drive = new HolonomicDrive(
+			Compass = new HMC6352();
+
+			Drive = new ControlledHolonomicDrive(Compass,
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelMatrix,
@@ -88,12 +107,11 @@ namespace Technobotts.Soccer
 
 			Button = new Button(FEZ_Pin.Digital.LDR);
 
-			Compass = new HMC6352();
 
 			LightGate = new LightGate(FEZ_Pin.AnalogIn.An0, 350, 160);
 
-			
-			LEDs = new LEDGroup(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di5, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di7);
+
+			LEDs = new LEDGroup(FEZ_Pin.Digital.An1, FEZ_Pin.Digital.An2, FEZ_Pin.Digital.An3, FEZ_Pin.Digital.An4);
 		}
 
 		public void ShowDiagnostics()

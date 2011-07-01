@@ -95,7 +95,7 @@ namespace Technobotts.Utilities
 		public bool Enabled
 		{
 			get { return _enabled; }
-			set { if (value != _enabled && Output != null && Input != null) lock (Output) { _enabled = value; } }
+			set { if (value != _enabled && Output != null && Input != null) lock (Output) { _enabled = value; Reset();  } }
 		}
 
 		public double Error { get; private set; }
