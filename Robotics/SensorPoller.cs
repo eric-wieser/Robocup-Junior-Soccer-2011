@@ -45,8 +45,8 @@ namespace Technobotts.Robotics
 			public int DistanceCM { get; set; }
 		}
 
-		public IRangeFinder[] USSensors;
-		public IIntensityDetector[] IRSensors;
+		public IRangeFinder[] US;
+		public IIntensityDetector[] IR;
 
 		private static RLP.Procedure _dataProcedure;
 		private byte[] _dataBuffer = new byte[20];
@@ -83,26 +83,26 @@ namespace Technobotts.Robotics
 				_dataProcedure = GetDataProcedure();
 			}
 
-			USSensors = new IRangeFinder[USDetectorPins.Length];
-			for (int i = 0; i < USSensors.Length; i++)
+			US = new IRangeFinder[USDetectorPins.Length];
+			for (int i = 0; i < US.Length; i++)
 			{
-				USSensors[i] = new NativeUSSensor(USDetectorPins[i]);
+				US[i] = new NativeUSSensor(USDetectorPins[i]);
 			}
 
-			IRSensors = new IIntensityDetector[IRDetectorPins.Length];
-			for (int i = 0; i < IRSensors.Length; i++)
+			IR = new IIntensityDetector[IRDetectorPins.Length];
+			for (int i = 0; i < IR.Length; i++)
 			{
-				IRSensors[i] = new NativeIRSensor(IRDetectorPins[i]);
+				IR[i] = new NativeIRSensor(IRDetectorPins[i]);
 			}
 		}
 
 		public void Poll()
 		{
 			_dataProcedure.InvokeEx(_dataBuffer);
-			for (int i = 0; i < IRSensors.Length; i++)
-				((NativeIRSensor) IRSensors[i]).Intensity = _dataBuffer[i];
-			for (int i = 0; i < USSensors.Length; i++)
-				((NativeUSSensor)USSensors[i]).DistanceCM = _dataBuffer[i + IRSensors.Length];
+			for (int i = 0; i < IR.Length; i++)
+				((NativeIRSensor) IR[i]).Intensity = _dataBuffer[i];
+			for (int i = 0; i < US.Length; i++)
+				((NativeUSSensor)US[i]).DistanceCM = _dataBuffer[i + IR.Length];
 		}
 
 		public int BrokenIRSensorCount
@@ -110,7 +110,7 @@ namespace Technobotts.Robotics
 			get
 			{
 				int i = 0;
-				foreach (IIntensityDetector ir in IRSensors)
+				foreach (IIntensityDetector ir in IR)
 					if (ir.Intensity == 0) i++;
 				return i;
 			}
@@ -118,11 +118,11 @@ namespace Technobotts.Robotics
 
 		public void Dispose()
 		{
-			foreach (NativeIRSensor sensor in IRSensors)
+			foreach (NativeIRSensor sensor in IR)
 			{
 				sensor.InnerPort.Dispose();
 			}
-			foreach (NativeUSSensor sensor in USSensors)
+			foreach (NativeUSSensor sensor in US)
 			{
 				sensor.InnerPort.Dispose();
 			}

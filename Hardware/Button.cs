@@ -11,6 +11,10 @@ namespace Technobotts.Hardware
 		public InputPort InnerPort;
 
 		public Button(FEZ_Pin.Digital pin) {
+			InnerPort = new InputPort((Cpu.Pin)pin, false, Port.ResistorMode.PullUp);
+		}
+		public Button(FEZ_Pin.Interrupt pin)
+		{
 			InnerPort = new InputPort((Cpu.Pin)pin, true, Port.ResistorMode.PullUp);
 		}
 

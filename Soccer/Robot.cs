@@ -27,7 +27,7 @@ namespace Technobotts.Soccer
 		public AngleFinder Compass;
 		public LightGate LightGate;
 
-		public SensorPoller SensorPoller;
+		public SensorPoller Sensors;
 
 		public class LEDGroup
 		{
@@ -66,15 +66,15 @@ namespace Technobotts.Soccer
 
 		public Robot()
 		{
-			SensorPoller = new SensorPoller();
+			Sensors = new SensorPoller();
 			#if NoMotors
 				MotorA = new FakeMotor{Name = "A"};
 				MotorB = new FakeMotor{Name = "B"};
 				MotorC = new FakeMotor{Name = "C"};
 			#else
-			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
-			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
-			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorA = new SmoothedDCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorB = new SmoothedDCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorC = new SmoothedDCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
 
 			#endif
 
@@ -103,33 +103,31 @@ namespace Technobotts.Soccer
 
 			//Kicker = new Solenoid(PWM.Pin.PWM5);
 
-			BallDetector = IntensityDetectorArray.FromRadialSensors(SensorPoller.IRSensors);
+			BallDetector = IntensityDetectorArray.FromRadialSensors(Sensors.IR);
 
-			Button = new Button(FEZ_Pin.Digital.LDR);
+			Button = new Button(FEZ_Pin.Digital.An5);
 
 
 			LightGate = new LightGate(FEZ_Pin.AnalogIn.An0, 350, 160);
 
-
+			
 			LEDs = new LEDGroup(FEZ_Pin.Digital.An1, FEZ_Pin.Digital.An2, FEZ_Pin.Digital.An3, FEZ_Pin.Digital.An4);
 		}
 
 		public void ShowDiagnostics()
 		{
-			int brokenIRCount = SensorPoller.BrokenIRSensorCount;
+			int brokenIRCount = Sensors.BrokenIRSensorCount;
 
-			if (brokenIRCount > 12)
-				LEDs.Orange.State = false;
-			if (brokenIRCount > 8)
-				LEDs.Orange.StartBlinking(500, 0.25);
-			else if (brokenIRCount > 4)
-				LEDs.Orange.StartBlinking(500, 0.5);
-			else if (brokenIRCount > 0)
-				LEDs.Orange.StartBlinking(500, 0.75);
-			if (brokenIRCount == 0)
-				LEDs.Orange.State = true;
+			Debug.Print(""+brokenIRCount);
 
-			LEDs.Green.State = LightGate.IsObstructed;
+			if (brokenIRCount == 16)
+				LEDs.IRIndicator.State = false;
+			else if (brokenIRCount == 0)
+				LEDs.IRIndicator.State = true;
+			else
+				LEDs.IRIndicator.StartBlinking(500, 1 - brokenIRCount / 16);
+
+			LEDs.LaserIndicator.State = LightGate.IsObstructed;
 		}
 
 		public void Dispose()
@@ -139,7 +137,7 @@ namespace Technobotts.Soccer
 			Kicker.Dispose();
 			Button.Dispose();
 			LightGate.Dispose();
-			SensorPoller.Dispose();
+			Sensors.Dispose();
 		}
 	}
 }

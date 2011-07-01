@@ -52,7 +52,7 @@ namespace Technobotts.Tests
 				Debug.Print("");
 			}
 #endif
-			LowPassVectorFilter filter = new LowPassVectorFilter(0.5, 0.06);
+			LowPassVectorFilter filter = new LowPassVectorFilter(0.5);
 			while (true)
 			{
 				DateTime t1 = DateTime.UtcNow;

@@ -43,6 +43,7 @@ namespace Technobotts.Robotics.Navigation
 		public new void Stop()
 		{
 			ControlEnabled = false;
+			Debug.Print("PID Disabled");
 			base.Stop();
 		}
 		public Matrix GetOrientation()

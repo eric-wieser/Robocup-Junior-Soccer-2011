@@ -117,6 +117,7 @@ namespace Technobotts.Robotics.Navigation
 		public void Stop()
 		{
 			DriveVelocity = Vector.Zero;
+			TurnVelocity = 0;
 		}
 
 		public void Dispose()

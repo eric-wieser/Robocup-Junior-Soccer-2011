@@ -6,34 +6,32 @@ namespace Technobotts.Utilities
 {
 	public class LowPassVectorFilter
 	{
-		private bool initialized = false;
-
-		private double a;
-
 		private Vector _output;
+		private double _lastTime;
 
-		public LowPassVectorFilter(double tau, double period)
+		public double Tau { get; private set; }
+
+		public LowPassVectorFilter(double tau)
 		{
-			a = MathEx.Exp(-period / tau);
+			Tau = tau;
 		}
 
 		public Vector apply(Vector value)
 		{
-			if (initialized)
-			{
+			if (_output == null)
+				_output = value;
+			else {
+				double dt = SystemTime.SecondsSince(_lastTime);
+				double a = MathEx.Exp(-dt / Tau);
 				_output = (1 - a) * value + a * _output;
 			}
-			else
-			{
-				_output = value;
-				initialized = true;
-			}
+			_lastTime = SystemTime.Seconds;
 			return _output;
 		}
 
 		public void reset()
 		{
-			initialized = false;
+			_output = null;
 		}
 	}
 }

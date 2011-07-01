@@ -149,7 +149,8 @@ namespace Technobotts.Hardware
 		{
 			get
 			{
-				return Heading / 180.0 * System.Math.PI;
+				try { return Heading / 180.0 * System.Math.PI; }
+				catch { return DoubleEx.NaN; }
 			}
 		}
 

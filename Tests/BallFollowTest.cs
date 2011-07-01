@@ -9,7 +9,7 @@ namespace Technobotts.Tests
 {
 	class BallFollowTest
 	{
-		public static LowPassVectorFilter filter = new LowPassVectorFilter(0.1, 0.05);
+		public static LowPassVectorFilter filter = new LowPassVectorFilter(0.1);
 		public static Range HeadingRange = new Range(-Math.PI, Math.PI);
 		public static void Main()
 		{
@@ -18,7 +18,7 @@ namespace Technobotts.Tests
 			double startHeading = r.Compass.Angle;
 			while (true)
 			{
-				r.SensorPoller.Poll();
+				r.Sensors.Poll();
 				Vector raw = r.BallDetector.Get();
 				Vector filtered = filter.apply(r.BallDetector.Get());
 

@@ -11,7 +11,7 @@ namespace Technobotts
 		public static void Main()
 		{
 			Soccer.Robot r = new Soccer.Robot();
-			IRangeFinder BackUS = r.SensorPoller.USSensors[2];
+			IRangeFinder BackUS = r.Sensors.US[2];
 
 			PIDController headingPid = new PIDController(PIDController.CoefficientsFromZieglerNicholsMethod(1.15, 0.87))
 			//pid = new PIDController(1.15)

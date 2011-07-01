@@ -11,15 +11,14 @@ namespace Technobotts.Soccer.Strategies
 {
 	public class FollowBallAndClearWall : Strategy
 	{
-		public LowPassVectorFilter filter = new LowPassVectorFilter(0.1, 0.05);
-		public override void ActiveInit()
+		public LowPassVectorFilter filter = new LowPassVectorFilter(0.1);
+		public override void Activated()
 		{
 			robot.Drive.ControlEnabled = true;
 		}
 		public override void ActivePeriodic()
 		{
-			robot.SensorPoller.Poll();
-
+			/*
 			if (robot.LightGate.IsObstructed)
 			{
 				robot.Drive.ControlEnabled = false;
@@ -33,10 +32,10 @@ namespace Technobotts.Soccer.Strategies
 
 				robot.Drive.ControlEnabled = true;
 			}
-			else
+			else*/
 			{
 				Vector direction = 20 * filter.apply(robot.BallDetector.Get());
-				IRangeFinder[] sensors = robot.SensorPoller.USSensors;
+				IRangeFinder[] sensors = robot.Sensors.US;
 
 				if (direction.Y > 0 && sensors[0].DistanceCM < 30)
 					direction = new Vector(direction.X, -25);
@@ -51,12 +50,7 @@ namespace Technobotts.Soccer.Strategies
 				robot.Drive.RotationPoint = 0;
 
 				robot.Drive.DriveVelocity = direction;
-				Thread.Sleep(10);
 			}
-		}
-		public override void ActiveCleanUp()
-		{
-			robot.Drive.ControlEnabled = false;
 		}
 
 		public static void Main() { new FollowBallAndClearWall().Execute(); }

@@ -5,33 +5,36 @@ namespace Technobotts.Utilities
 {
 	class LowPassFilter
 	{
-		private bool initialized = false;
-
-		private double a;
-
+		private bool _initialized = false;
+		private double _lastTime;
 		private double _output;
 
-		public LowPassFilter(double tau, double period) {
-			a = MathEx.Exp(-period / tau);
+		public double Tau { get; private set; }
+
+		public LowPassFilter(double tau) {
+			Tau = tau;
 		}
 
 		public double apply(double value)
 		{
-			if (initialized)
+			if (_initialized)
 			{
+				double dt = SystemTime.SecondsSince(_lastTime);
+				double a = MathEx.Exp(-dt / Tau);
 				_output = (1 - a) * value + a * _output;
 			}
 			else
 			{
 				_output = value;
-				initialized = true;
+				_initialized = true;
 			}
+			_lastTime = SystemTime.Seconds;
 			return _output;
 		}
 
 		public void reset()
 		{
-			initialized = false;
+			_initialized = false;
 		}
 	}
 }

@@ -29,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.LaserTest</StartupObject>
+    <StartupObject>Technobotts.Soccer.Strategies.FollowBallAndClearWall</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -68,6 +68,7 @@
     <Compile Include="Robotics\Navigation\HolonomicDrive.cs" />
     <Compile Include="Robotics\AngleFinder.cs" />
     <Compile Include="Robotics\SensorPoller.cs" />
+    <Compile Include="Robotics\SmoothedMotor.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
     <Compile Include="Soccer\Strategies\FollowBallAndClearWall.cs" />
     <Compile Include="Soccer\Strategy.cs" />

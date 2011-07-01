@@ -7,13 +7,11 @@ namespace Technobotts.Soccer
 	{
 		protected Robot robot = new Robot();
 
-		public virtual void ActiveInit() {}
-		public virtual void ActivePeriodic() { }
-		public virtual void ActiveCleanUp() { robot.Drive.Stop(); }
+		public virtual void Activated() { }
+		public virtual void ActivePeriodic() {  }
 
-		public virtual void DisabledInit() { }
+		public virtual void Disabled() { }
 		public virtual void DisabledPeriodic() { }
-		public virtual void DisabledCleanUp() { }
 
 		public bool IsActive = false;
 
@@ -24,20 +22,31 @@ namespace Technobotts.Soccer
 				while (true)
 				{
 					robot.LEDs.ModeIndicator.StartBlinking(1000, 0.75);
-					DisabledInit();
+					Disabled();
+					robot.Drive.Stop();
 					while (!robot.Button.IsPressed)
+					{
+						robot.Sensors.Poll();
+						Utilities.SystemTime.Update();
+						robot.ShowDiagnostics();
 						DisabledPeriodic();
-					DisabledCleanUp();
+					}
 
 					robot.LEDs.ModeIndicator.State = true;
-					ActiveInit();
+					Activated();
 					while (robot.Button.IsPressed)
+					{
+						robot.Sensors.Poll();
+						Utilities.SystemTime.Update();
+						robot.ShowDiagnostics();
 						ActivePeriodic();
-					ActiveCleanUp();
+					}
+
 				}
 			}
 			catch
 			{
+				robot.Drive.Stop();
 				robot.LEDs.StartBlinking(250, 0.5);
 			}
 		}

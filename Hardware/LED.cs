@@ -55,8 +55,10 @@ namespace Technobotts.Hardware
 			onTime = (int)(period * dutyCycle);
 			offTime = (int)(period * (1 - dutyCycle));
 
-			blinking = true;
-			timer.Change(0, Timeout.Infinite);
+			if(!blinking) {
+				blinking = true;
+				timer.Change(0, Timeout.Infinite);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]
@@ -72,8 +74,8 @@ namespace Technobotts.Hardware
 			if (!blinking)
 				return;
 
-			timer.Change(InternalState ? onTime : offTime, Timeout.Infinite);
 			InternalState = !InternalState;
+			timer.Change(InternalState ? onTime : offTime, Timeout.Infinite);
 		}
 	}
 }
