@@ -29,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Soccer.Strategies.FollowBallAndClearWall</StartupObject>
+    <StartupObject>Technobotts.Tests.USTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -37,7 +37,7 @@
     <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
-    <Compile Include="Goalie.cs" />
+    <Compile Include="Soccer\Strategies\Goalie.cs" />
     <Compile Include="Hardware\Button.cs" />
     <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
@@ -48,7 +48,7 @@
     <Compile Include="Hardware\TechnobottsRTC.cs" />
     <Compile Include="Hardware\UltrasonicSensor2.cs" />
     <Compile Include="IRActuallyPluggedIn.cs" />
-    <Compile Include="LaserTest.cs" />
+    <Compile Include="Tests\LEDTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -75,18 +75,16 @@
     <Compile Include="Soccer\Robot.cs" />
     <Compile Include="Tests\BallFollowTest.cs" />
     <Compile Include="Tests\CompassTest.cs" />
-    <Compile Include="Tests\BallFollowPIDTest.cs" />
     <Compile Include="Tests\DriveTest.cs" />
-    <Compile Include="Tests\HelloWorld.cs" />
     <Compile Include="Tests\IRDetectorTest.cs" />
     <Compile Include="Tests\IRRingTest.cs" />
     <Compile Include="Tests\LaserTest.cs" />
     <Compile Include="Tests\PIDTest.cs" />
-    <Compile Include="Tests\RLPTest.cs" />
     <Compile Include="Tests\RTCTest.cs" />
     <Compile Include="Tests\SolenoidTest.cs" />
     <Compile Include="Tests\MotorTest.cs" />
     <Compile Include="Tests\USSensorTest.cs" />
+    <Compile Include="Tests\USTest.cs" />
     <Compile Include="Utilities\LowPassVectorFilter.cs" />
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />

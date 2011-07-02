@@ -72,9 +72,9 @@ namespace Technobotts.Soccer
 				MotorB = new FakeMotor{Name = "B"};
 				MotorC = new FakeMotor{Name = "C"};
 			#else
-			MotorA = new SmoothedDCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
-			MotorB = new SmoothedDCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
-			MotorC = new SmoothedDCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorA = new DCMotor(PWM.Pin.PWM1, FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di29) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorB = new DCMotor(PWM.Pin.PWM2, FEZ_Pin.Digital.Di30, FEZ_Pin.Digital.Di31) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
+			MotorC = new DCMotor(PWM.Pin.PWM3, FEZ_Pin.Digital.Di32, FEZ_Pin.Digital.Di33) { SpeedCharacteristic = DCMotor.Characteristic.Linear };
 
 			#endif
 
