@@ -5,13 +5,17 @@ namespace Technobotts
 {
 	public struct DoubleEx
 	{
-		public const double NaN = 0.0f / 0.0f;
+		public const double NaN = -0.0d / 0.0d;
 		public const double NegativeInfinity = -1.0f / 0.0f;
 		public const double PositiveInfinity = 1.0f / 0.0f;
-		public static bool IsNaN(double x)
+
+		public const long NANMASK = 0x7FF0000000000000;
+
+		public unsafe static bool IsNaN(double value)        
 		{
-			return x != x;
-		}
+			long rep = *((long*)&value);
+			return ((rep & NANMASK) == NANMASK);		
+		} 
 
 		public static bool IsInfinite(double x)
 		{

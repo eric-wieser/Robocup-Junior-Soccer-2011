@@ -15,7 +15,7 @@ namespace Technobotts.Robotics
 		public new double Speed
 		{
 			get { return base.Speed; }
-			set { base.Speed = Filter.apply(value); }
+			set { base.Speed = Filter.Apply(value); }
 		}
 	}
 }

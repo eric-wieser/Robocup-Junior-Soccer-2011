@@ -37,6 +37,7 @@ namespace Technobotts.Utilities
 			public Setter Set { get; private set; }
 			public Range Range { get; private set; }
 		}
+		
 		public double P { get; private set; }
 		public double I { get; private set; }
 		public double D { get; private set; }
@@ -171,13 +172,30 @@ namespace Technobotts.Utilities
 			}
 		}
 
+		private double getError()
+		{
+			double error = SetPoint - Input.Get();
+			if (Continuous)
+			{
+				double inputRange = Input.Range.Span;
+				while (error > inputRange / 2)
+					error -= inputRange;
+				while (error < -inputRange / 2)
+					error += inputRange;
+			}
+			return error;
+		}
+
 		public void Dispose()
 		{
 			_controlLoop.Dispose();
 		}
 
+		double speedSmoother = DoubleEx.NaN;
+
 		private void calculate()
 		{
+			SystemTime.Update();
 			lock (this)
 			{
 				if (Input == null || Output == null)
@@ -194,18 +212,8 @@ namespace Technobotts.Utilities
 					double result;
 					lock (this)
 					{
-						//Handle continuity
-						double error = SetPoint - Input.Get();
-						if (DoubleEx.IsNaN(error)) return;
-						if (Continuous)
-						{
-							double inputRange = Input.Range.Span;
-							while (error > inputRange / 2)
-								error -= inputRange;
-							while (error < -inputRange / 2)
-								error += inputRange;
-						}
-						Error = error;
+						Error = getError();
+						if (DoubleEx.IsNaN(Error)) return;
 
 						//Handle integral part overflow
 						double newTotal = TotalError + Error;
@@ -215,7 +223,14 @@ namespace Technobotts.Utilities
 						//Calcate PID output
 						result = P * Error;
 						result += I * TotalError * Period;
-						result +=  D * (DoubleEx.IsNaN(PrevError) ? 0 : (Error - PrevError)) / Period;
+
+
+						if (!DoubleEx.IsNaN(PrevError)) {
+							double speed = (Error - PrevError) / Period;
+							//speedSmoother = DoubleEx.IsNaN(speedSmoother) ? speed : speedSmoother * 0.6 + speed * 0.4;
+							result += D * speed;//speedSmoother;
+						}
+
 
 						//Normalize to within max and min output
 						result = Output.Range.Clip(result);
@@ -255,7 +270,7 @@ namespace Technobotts.Utilities
 		public void Reset()
 		{
 			Error = 0;
-			PrevError = 0;
+			PrevError = DoubleEx.NaN;
 			TotalError = 0;
 		}
 	}

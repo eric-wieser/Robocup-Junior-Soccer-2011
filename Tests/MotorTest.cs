@@ -22,7 +22,7 @@ namespace Technobotts.Tests
 
 			while (true)
 			{
-				r.MotorA.Speed = MathEx.Sin(i);
+				r.MotorA.Speed = r.MotorB.Speed = r.MotorC.Speed= MathEx.Sin(i);
 				i += step;
 				Thread.Sleep(50);
 			}

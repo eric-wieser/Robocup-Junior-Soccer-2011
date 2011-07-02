@@ -9,7 +9,7 @@ namespace Technobotts.Robotics.Navigation
 	{
 		private PIDController _pid;
 		private IAngleFinder _compass;
-		private readonly double[] pidConstants = PIDController.CoefficientsFromZieglerNicholsMethod(1.15, 0.87);
+		private readonly double[] pidConstants = new double[3] { 0.5, 1.5, 0.075 };
 
 		public ControlledHolonomicDrive(IAngleFinder compass, params Wheel[] wheels) : base(wheels)
 		{

@@ -7,7 +7,7 @@ namespace Technobotts.Utilities
 	{
 		private bool _initialized = false;
 		private double _lastTime;
-		private double _output;
+		public double Output {get; private set;}
 
 		public double Tau { get; private set; }
 
@@ -15,24 +15,25 @@ namespace Technobotts.Utilities
 			Tau = tau;
 		}
 
-		public double apply(double value)
+		public double Apply(double value)
 		{
+			SystemTime.Update();
 			if (_initialized)
 			{
 				double dt = SystemTime.SecondsSince(_lastTime);
 				double a = MathEx.Exp(-dt / Tau);
-				_output = (1 - a) * value + a * _output;
+				Output = (1 - a) * value + a * Output;
 			}
 			else
 			{
-				_output = value;
+				Output = value;
 				_initialized = true;
 			}
 			_lastTime = SystemTime.Seconds;
-			return _output;
+			return Output;
 		}
 
-		public void reset()
+		public void Reset()
 		{
 			_initialized = false;
 		}

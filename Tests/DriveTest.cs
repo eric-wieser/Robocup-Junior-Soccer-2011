@@ -22,7 +22,7 @@ namespace Technobotts.Tests
 
 			while (true)
 			{
-				r.Drive.DriveVelocity = Vector.FromPolarCoords(2, System.Math.PI * angle / 3);
+				r.Drive.DriveVelocity = Vector.FromPolarCoords(200, System.Math.PI * angle / 3);
 				Thread.Sleep(750);
 				/*if (angle % 6 == 0)
 				{

@@ -144,13 +144,12 @@ namespace Technobotts.Hardware
 				return getOutput() / 10.0;
 			}
 		}
-
 		public double Angle
 		{
 			get
 			{
-				try { return Heading / 180.0 * System.Math.PI; }
-				catch { return DoubleEx.NaN; }
+				try { return Heading / 180.0 * System.Math.PI;}
+				catch (I2CException e) { return DoubleEx.NaN; }
 			}
 		}
 
