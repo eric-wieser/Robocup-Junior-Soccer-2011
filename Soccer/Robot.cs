@@ -24,7 +24,7 @@ namespace Technobotts.Soccer
 		public ControlledHolonomicDrive Drive;
 		public Solenoid Kicker;
 		public Button Button;
-		public AngleFinder Compass;
+		public IAngleFinder Compass;
 		public LightGate LightGate;
 
 		public SensorPoller Sensors;
@@ -40,8 +40,6 @@ namespace Technobotts.Soccer
 			public LED IRIndicator { get { return Orange; } }
 			public LED ModeIndicator { get { return Green; } }
 			public LED Other { get { return White; } }
-
-
 
 			public bool State { set { Purple.State = Orange.State = Green.State = White.State = value; } }
 
@@ -82,6 +80,7 @@ namespace Technobotts.Soccer
 			Vector wheelPosition = Vector.J * 95;
 
 			Compass = new HMC6352();
+			Compass = new FieldHeadingFinder(Compass);
 
 			Drive = new ControlledHolonomicDrive(Compass,
 				new HolonomicDrive.Wheel(

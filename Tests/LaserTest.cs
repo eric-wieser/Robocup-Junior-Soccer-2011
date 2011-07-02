@@ -19,7 +19,8 @@ namespace Technobotts.Tests
 
 			while (true)
 			{
-				Debug.Print(photodiode.Read() > threshold ? "No ball" : "Ball");
+				int d = photodiode.Read();
+				Debug.Print(d + ": "+ (d > threshold ? "No ball" : "Ball"));
 				Thread.Sleep(50);
 			}
 		}

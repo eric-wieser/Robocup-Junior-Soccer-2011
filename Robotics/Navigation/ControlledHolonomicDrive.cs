@@ -8,10 +8,10 @@ namespace Technobotts.Robotics.Navigation
 	public class ControlledHolonomicDrive : HolonomicDrive
 	{
 		private PIDController _pid;
-		private AngleFinder _compass;
+		private IAngleFinder _compass;
 		private readonly double[] pidConstants = PIDController.CoefficientsFromZieglerNicholsMethod(1.15, 0.87);
 
-		public ControlledHolonomicDrive(AngleFinder compass, params Wheel[] wheels) : base(wheels)
+		public ControlledHolonomicDrive(IAngleFinder compass, params Wheel[] wheels) : base(wheels)
 		{
 			_compass = compass;
 
@@ -26,7 +26,7 @@ namespace Technobotts.Robotics.Navigation
 					Range.SignedAngle * 2
 				),
 				Continuous = true,
-				SetPoint = _compass.Angle
+				SetPoint = 0
 			};
 		}
 

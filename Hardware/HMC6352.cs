@@ -6,7 +6,7 @@ using Technobotts.Robotics;
 
 namespace Technobotts.Hardware
 {
-	public class HMC6352 : I2CDevice, AngleFinder
+	public class HMC6352 : I2CDevice, IAngleFinder
 	{
 		public const ushort DefaultAddress = 0x21;
 		public const int ClockSpeed = 100;

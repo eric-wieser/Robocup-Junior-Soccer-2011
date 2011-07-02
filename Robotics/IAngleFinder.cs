@@ -3,8 +3,8 @@ using System.Text;
 
 namespace Technobotts.Robotics
 {
-	public interface AngleFinder
+	public interface IAngleFinder
 	{
-		double Angle {get;}
+		double Angle { get; }
 	}
 }
