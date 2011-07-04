@@ -18,12 +18,30 @@ namespace Technobotts.Robotics
 
 		public void RecordNorthDirection()
 		{
-			ZeroAngle = AngleFinder.Angle;
+			double delta = 3 * System.Math.PI/180;	// get within 3 degrees.
+
+			int i=0;
+			double iVal ;
+			do
+			{
+				iVal = AngleFinder.Angle;
+
+				for (i = 0; i < 10; i++)
+				{
+					// wait for 10 iterations where angle differs by less than delta.
+					if (MathEx.Abs(iVal - AngleFinder.Angle) > delta)
+					{
+						break;
+					}
+				}
+			} while (i != 10);
+			ZeroAngle =iVal;
 		}
 
 		public double Angle {
 			get {
-				return Range.Angle.Wrap(AngleFinder.Angle - ZeroAngle);
+				double currentAngle = AngleFinder.Angle;
+				return Range.Angle.Wrap(currentAngle - ZeroAngle);
 			}
 		}
 	}

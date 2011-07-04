@@ -92,7 +92,7 @@ namespace Technobotts.Soccer
 				new HolonomicDrive.Wheel(
 					Matrix.Rotate180 * wheelPosition,
 					Matrix.Rotate180 * wheelMatrix,
-					//MotorB 
+					// MotorB 
 					new RegulatedMotor(MotorB)
 				),
 				new HolonomicDrive.Wheel(
