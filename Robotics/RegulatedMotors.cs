@@ -11,15 +11,28 @@ namespace Technobotts.Robotics
 		private static Timer _controlLoop;
 		private static double _period = 0.025;
 
-		private static double step = 0.1;
+		private static double step = 0.33;
 
 		private static ArrayList motors = new ArrayList();
 
 		private IMotor _innerMotor;
 
-		static RegulatedMotor()
+		public static void EnableRegulatedMotorAlgorithm(bool bEnable)
 		{
-			_controlLoop = new Timer(new TimerCallback(updateMotors), null, 0, (int)(_period * 1000));
+			if (_controlLoop != null) using(_controlLoop);
+
+			if (bEnable)
+			{
+				_controlLoop = new Timer(new TimerCallback(updateMotors), null, 0, (int)(_period * 1000));
+			}
+			else
+			{
+				// already switched off.
+			}
+		}
+
+		static RegulatedMotor()
+		{	
 		}
 
 		public RegulatedMotor(IMotor motor)

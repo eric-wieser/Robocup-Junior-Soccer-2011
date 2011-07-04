@@ -10,14 +10,8 @@ namespace Technobotts.Geometry
 		public static readonly Vector J = new Vector(0, 1);
 		private static readonly Vector NaN = new Vector(DoubleEx.NaN, DoubleEx.NaN);
 
-		public double X;
-		public double Y;
-
-		public void SetNewVector(double x, double y)
-		{
-			X = x;
-			Y = y;
-		}
+		public readonly double X;
+		public readonly double Y;
 
 		public Vector(double x = 0, double y = 0)
 		{

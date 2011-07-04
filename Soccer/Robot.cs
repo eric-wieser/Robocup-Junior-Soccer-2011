@@ -86,20 +86,24 @@ namespace Technobotts.Soccer
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelMatrix,
-					MotorA //new RegulatedMotor(MotorA)
+					// MotorA 
+					new RegulatedMotor(MotorA)
 				),
 				new HolonomicDrive.Wheel(
 					Matrix.Rotate180 * wheelPosition,
 					Matrix.Rotate180 * wheelMatrix,
-					MotorB //new RegulatedMotor(MotorB)
+					//MotorB 
+					new RegulatedMotor(MotorB)
 				),
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelPosition,
 					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelMatrix,
-					MotorC //new RegulatedMotor(MotorC)
+					//MotorC 
+					new RegulatedMotor(MotorC)
 				)
 			);
 
+#if USEOLDDRIVE
 			OldDrive = new HolonomicDrive(
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
@@ -117,6 +121,7 @@ namespace Technobotts.Soccer
 					MotorC
 				)
 			);
+#endif
 
 			//Kicker = new Solenoid(PWM.Pin.PWM5);
 
@@ -129,6 +134,7 @@ namespace Technobotts.Soccer
 
 			
 			LEDs = new LEDGroup(FEZ_Pin.Digital.An1, FEZ_Pin.Digital.An2, FEZ_Pin.Digital.An3, FEZ_Pin.Digital.An4);
+			RegulatedMotor.EnableRegulatedMotorAlgorithm(true);
 		}
 
 		public void ShowDiagnostics()
@@ -151,7 +157,7 @@ namespace Technobotts.Soccer
 		{
 			Drive.Dispose();
 			LightGate.Dispose();
-			Kicker.Dispose();
+//			Kicker.Dispose();
 			Button.Dispose();
 			LightGate.Dispose();
 			Sensors.Dispose();
