@@ -19,7 +19,7 @@ namespace Technobotts.Robotics
 
 		public static void EnableRegulatedMotorAlgorithm(bool bEnable)
 		{
-			if (_controlLoop != null) using(_controlLoop);
+			if (_controlLoop != null) _controlLoop.Dispose();
 
 			if (bEnable)
 			{

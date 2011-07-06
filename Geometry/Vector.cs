@@ -83,6 +83,11 @@ namespace Technobotts.Geometry
 			get { return new Vector(-Y, X); }
 		}
 
+        public double Heading
+        {
+            get { return MathEx.Atan2(X, Y); }
+        }
+
 		public double Length
 		{
 			get { return MathEx.Sqrt(X * X + Y * Y); }

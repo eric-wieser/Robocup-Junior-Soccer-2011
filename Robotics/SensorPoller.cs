@@ -116,6 +116,22 @@ namespace Technobotts.Robotics
 			}
 		}
 
+        public string BrokenIRSensors
+        {
+            get
+            {
+				string s = "";
+				string sep = "";
+                for (int i = 0; i < IR.Length; i++)
+					if (IR[i].Intensity == 0)
+					{
+						s += sep + i;
+						sep = ",";
+					}
+                return s;
+            }
+        }
+
 		public void Dispose()
 		{
 			foreach (NativeIRSensor sensor in IR)

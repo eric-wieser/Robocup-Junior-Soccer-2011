@@ -63,16 +63,18 @@ namespace Technobotts.Soccer.Strategies
 				Vector direction;
 #if TRY_PLAYING_FOOTBALL
 				direction = 200 * filter.apply(robot.BallDetector.Get());
-				double angle = MathExGHI.Atan2(direction.X, direction.Y);
-				angle = angle * 180 / Math.PI;
+
+                double angle = MathEx.ToDegrees(direction.Heading);
+
 				// Debug.Print("Ball at " + angle);
 
 
 				double absAngle = MathEx.Abs(angle / 180);
-				double sign = Technobotts.MathEx.Sign(angle);
+				double sign = MathEx.Sign(angle);
 				double newAngle = (exponent * absAngle - Math.Pow(absAngle, exponent)) /
 									(exponent - 1) * sign * 180;
-				double x = 100.0 * MathExGHI.Tan(newAngle * Math.PI/180.0);
+				double x = 100.0 * MathExGHI.Tan(MathEx.ToRadians(newAngle));
+
 				// Debug.Print("New Heading " + newAngle);
 				if (DoubleEx.IsNaN(x))
 				{
@@ -80,7 +82,7 @@ namespace Technobotts.Soccer.Strategies
 				}
 				else
 				{
-					direction.SetNewVector(x, ((absAngle > 0.5) ? -1 : 1) * 300.0);
+					direction.SetNewVector(x, (absAngle > 0.5 ? -1 : 1) * 300.0);
 				}
 #endif
 
