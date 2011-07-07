@@ -19,13 +19,13 @@ namespace Technobotts.Tests
 			double step = System.Math.PI / 16;
 
 			r.Button.WaitForPress();
-
-			while (true)
-			{
-				r.MotorA.Speed = r.MotorB.Speed = r.MotorC.Speed= MathEx.Sin(i);
-				i += step;
-				Thread.Sleep(50);
-			}
+			r.MotorA.Speed = 1;
+			Thread.Sleep(1000);
+			r.MotorB.Speed = 1;
+			Thread.Sleep(1000);
+			r.MotorC.Speed = 1;
+			Thread.Sleep(1000);
+			r.Dispose();
 		}
 	}
 }

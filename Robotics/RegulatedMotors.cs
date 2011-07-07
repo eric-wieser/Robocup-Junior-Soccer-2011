@@ -51,7 +51,7 @@ namespace Technobotts.Robotics
 		private void updateSpeed()
 		{
 			const double threshold = 0.1;
-
+#if MIGHT_BREAK_STUFF
 			//Going fast forward
 			if (ActualSpeed > threshold)
 			{
@@ -70,6 +70,9 @@ namespace Technobotts.Robotics
 					ActualSpeed = -threshold;
 			}
 
+#else
+			if (false) ;
+#endif
 			else
 			{
 				Range allowableChange = new Range(MaxAcceleration * _period);

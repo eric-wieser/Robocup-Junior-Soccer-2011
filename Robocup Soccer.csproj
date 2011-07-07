@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Soccer.Strategies.FollowBallAndClearWall</StartupObject>
+    <StartupObject>Technobotts.Soccer.Strategies.BetterFollower</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -45,6 +45,7 @@
     <Compile Include="Robotics\FieldHeadingFinder.cs" />
     <Compile Include="Robotics\RegulatedMotors.cs" />
     <Compile Include="Robotics\USSensorAggregator.cs" />
+    <Compile Include="Soccer\Strategies\BetterFollower.cs" />
     <Compile Include="Soccer\Strategies\Goalie.cs" />
     <Compile Include="Hardware\Button.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
