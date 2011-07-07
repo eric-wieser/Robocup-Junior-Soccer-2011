@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.USTest</StartupObject>
+    <StartupObject>Technobotts.Tests.LaserTest</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -52,7 +52,6 @@
     <Compile Include="Hardware\I2CException.cs" />
     <Compile Include="Hardware\LED.cs" />
     <Compile Include="Hardware\LightGate.cs" />
-    <Compile Include="Hardware\SyncedUltrasonicSensors.cs" />
     <Compile Include="Hardware\UltrasonicSensor2.cs" />
     <Compile Include="IRActuallyPluggedIn.cs" />
     <Compile Include="Tests\LEDTest.cs" />
@@ -75,7 +74,6 @@
     <Compile Include="Robotics\Navigation\HolonomicDrive.cs" />
     <Compile Include="Robotics\IAngleFinder.cs" />
     <Compile Include="Robotics\SensorPoller.cs" />
-    <Compile Include="Robotics\SmoothedMotor.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
     <Compile Include="Soccer\Strategies\FollowBallAndClearWall.cs" />
     <Compile Include="Soccer\Strategy.cs" />
@@ -93,6 +91,7 @@
     <Compile Include="Tests\MotorTest.cs" />
     <Compile Include="Tests\USSensorTest.cs" />
     <Compile Include="Tests\USTest.cs" />
+    <Compile Include="Utilities\Distances.cs" />
     <Compile Include="Utilities\LowPassVectorFilter.cs" />
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />

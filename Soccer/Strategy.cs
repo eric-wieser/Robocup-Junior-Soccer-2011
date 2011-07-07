@@ -23,6 +23,11 @@ namespace Technobotts.Soccer
 			{
 				while (true)
 				{
+					if (robot.Button.IsPressed)
+					{
+						robot.LEDs.ModeIndicator.StartBlinking(500, .5);
+						while (robot.Button.IsPressed) ;
+					}
 					robot.LEDs.ModeIndicator.StartBlinking(1000, 0.75);
 					Disabled();
 					robot.Drive.Stop();

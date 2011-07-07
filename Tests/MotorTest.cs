@@ -15,8 +15,6 @@ namespace Technobotts.Tests
 		public static void Main()
 		{
 			Soccer.Robot r = new Soccer.Robot();
-			double i = 0;
-			double step = System.Math.PI / 16;
 
 			r.Button.WaitForPress();
 			r.MotorA.Speed = 1;
