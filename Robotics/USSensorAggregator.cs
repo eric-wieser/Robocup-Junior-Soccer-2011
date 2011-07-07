@@ -26,7 +26,7 @@ namespace Technobotts.Robotics
 		}
 
 
-		private IAngleFinder compass;
+		public IAngleFinder Compass;
 
 
 		public IRangeFinder Front;
@@ -81,12 +81,12 @@ namespace Technobotts.Robotics
 
 		public Vector GetPosition()
 		{
-			double heading = compass.Angle;
+			double heading = Compass.Angle;
 			heading /= MathEx.TwoPi;
 
 			Orientation o = Orientation.Invalid;
 
-			if (HeadingRanges[0].Contains(heading) || HeadingRanges[5].Contains(heading))
+			if (HeadingRanges[0].Contains(heading) || HeadingRanges[4].Contains(heading))
 				o = Orientation.North;
 			else if (HeadingRanges[1].Contains(heading))
 				o = Orientation.East;

@@ -43,6 +43,8 @@ namespace Technobotts.Utilities
 		public double D { get; private set; }
 		public double Period { get; private set; }
 
+		public Range ErrorLimit = new Range();
+
 		private OutputFunction _output;
 		public OutputFunction Output {
 			get { return _output; }
@@ -214,11 +216,7 @@ namespace Technobotts.Utilities
 					{
 						Error = getError();
 						if (DoubleEx.IsNaN(Error)) return;
-						double fudge = MathEx.TwoPi / 8;
-						if (Error > fudge)
-							Error = fudge;
-						if (Error < -fudge)
-							Error = -fudge;
+						Error = ErrorLimit.Clip(Error);
 
 						//Handle integral part overflow
 						double newTotal = TotalError + Error;

@@ -41,7 +41,8 @@ namespace Technobotts.Robotics.Navigation
 					Range.SignedAngle * 2
 				),
 				Continuous = true,
-				SetPoint = 0
+				SetPoint = 0,
+				ErrorLimit = new Range(MathEx.TwoPi / 8)
 			};
 		}
 

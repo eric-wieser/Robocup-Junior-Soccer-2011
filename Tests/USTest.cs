@@ -2,6 +2,7 @@ using System;
 using Microsoft.SPOT;
 using Technobotts.Soccer;
 using Technobotts.Robotics;
+using Technobotts.Utilities;
 
 namespace Technobotts.Tests
 {
@@ -11,18 +12,20 @@ namespace Technobotts.Tests
 		{
 			Robot r = new Robot();
 			IRangeFinder[] us = r.Sensors.US;
+			Debug.Print(""+new Range().Contains(1));
+			USSensorAggregator uss = new USSensorAggregator()
+			{
+				Front = us[0],
+				Right = us[1],
+				Back = us[2],
+				Left = us[3],
+				Compass = r.Compass
+			};
+
 			while (true)
 			{
 				r.Sensors.Poll();
-				int front = us[0].DistanceCM;
-				int right = us[1].DistanceCM;
-				int back = us[2].DistanceCM;
-				int left = us[3].DistanceCM;
-
-				if (r.Button.IsPressed)
-					Debug.Print("Vertical: " + front + " + " + back + " = " + (front + back));
-				else
-					Debug.Print("Horizontal: " + left + " + " + right + " = " + (left + right));
+				Debug.Print(""+uss.GetPosition());
 			}
 		}
 	}
