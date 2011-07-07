@@ -214,6 +214,11 @@ namespace Technobotts.Utilities
 					{
 						Error = getError();
 						if (DoubleEx.IsNaN(Error)) return;
+						double fudge = MathEx.TwoPi / 8;
+						if (Error > fudge)
+							Error = fudge;
+						if (Error < -fudge)
+							Error = -fudge;
 
 						//Handle integral part overflow
 						double newTotal = TotalError + Error;

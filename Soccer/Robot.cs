@@ -141,15 +141,13 @@ namespace Technobotts.Soccer
 		{
 			int brokenIRCount = Sensors.BrokenIRSensorCount;
 
-			Debug.Print(""+brokenIRCount);
-            /*
 			if (brokenIRCount == 16)
 				LEDs.IRIndicator.State = false;
 			else if (brokenIRCount == 0)
 				LEDs.IRIndicator.State = true;
 			else
 				LEDs.IRIndicator.StartBlinking(500, 1 - brokenIRCount / 16.0);
-            */
+
 			LEDs.LaserIndicator.State = LightGate.IsObstructed;
 		}
 

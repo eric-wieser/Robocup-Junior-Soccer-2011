@@ -38,10 +38,11 @@ namespace Technobotts.Soccer.Strategies
 			dtNextChange = (DateTime.UtcNow).AddSeconds(seconds);
 		}
 
-		public LowPassVectorFilter filter = new LowPassVectorFilter(0.1);
+		public LowPassVectorFilter filter = new LowPassVectorFilter(0.025);
 		public override void Activated()
 		{
 			robot.Drive.ControlEnabled = true;
+			robot.Drive.DriveVelocity = 800 * Vector.J;
 		}
 		public override void ActivePeriodic()
 		{
@@ -54,7 +55,6 @@ namespace Technobotts.Soccer.Strategies
 				robot.Drive.TurnVelocity = 0;
 				//Thread.Sleep(500);
 				//robot.Drive.TurnVelocity = 0;
-				Thread.Sleep(500);
 
 				robot.Drive.ControlEnabled = true;
 			}
@@ -64,11 +64,7 @@ namespace Technobotts.Soccer.Strategies
 #if TRY_PLAYING_FOOTBALL
 				direction = 200 * filter.apply(robot.BallDetector.Get());
 
-                double angle = MathEx.ToDegrees(direction.Heading);
-
-				// Debug.Print("Ball at " + angle);
-
-
+				/*
 				double absAngle = MathEx.Abs(angle / 180);
 				double sign = MathEx.Sign(angle);
 				double newAngle = (exponent * absAngle - Math.Pow(absAngle, exponent)) /
@@ -78,12 +74,13 @@ namespace Technobotts.Soccer.Strategies
 				// Debug.Print("New Heading " + newAngle);
 				if (DoubleEx.IsNaN(x))
 				{
-					direction.SetNewVector(300.0 * sign, 0.0);
+					direction.SetNewVector(0,0);//300.0 * sign, 0.0);
 				}
 				else
 				{
 					direction.SetNewVector(x, (absAngle > 0.5 ? -1 : 1) * 300.0);
-				}
+				}*/
+				direction = new Vector(direction.X, direction.Y - MathEx.Abs(direction.X * 0.5));
 #endif
 
 				/*				
@@ -104,7 +101,6 @@ namespace Technobotts.Soccer.Strategies
 */
 				// direction.SetNewVector(direction.X, direction.Y);
 
-				IRangeFinder[] sensors = robot.Sensors.US;
 
 #if WALK_PITCH
 				// robot.Drive.ControlEnabled = false;
@@ -120,17 +116,19 @@ namespace Technobotts.Soccer.Strategies
 
 #if DONT_BUMP_WALLS
 
+				IRangeFinder[] sensors = robot.Sensors.US;
+
 				int cm;
 
 				if (direction.Y > 0 && (cm = sensors[0].DistanceCM) < 30) // negative y moves away
-					direction = new Vector(direction.X, (30 - cm) / 120.0 * direction.Y);
+					direction = new Vector(direction.X, (cm - 30) / 120.0 * direction.Y);
 				else if (direction.Y < 0 && (cm = sensors[2].DistanceCM) < 30) // positive y moves away
-					direction = new Vector(direction.X,  (30 - cm) / 120.0 * direction.Y);
+					direction = new Vector(direction.X,  (cm - 30) / 120.0 * direction.Y);
 
 				if (direction.X > 0 && (cm = sensors[1].DistanceCM) < 20) // negative x moves away
-					direction = new Vector((20 - cm) / 80.0 * direction.X, direction.Y);
+					direction = new Vector((cm - 20) / 80.0 * direction.X, direction.Y);
 				else if (direction.X < 0 && (cm = sensors[3].DistanceCM) < 20) // positive x moves away.
-					direction = new Vector((20 - cm) / 80.0 * direction.X,direction.Y);
+					direction = new Vector((cm - 20) / 80.0 * direction.X,direction.Y);
 #endif
 				robot.Drive.RotationPoint = 0;
 				// robot.Drive.TurnVelocity = 0;

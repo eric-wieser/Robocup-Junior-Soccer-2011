@@ -1,5 +1,6 @@
 using System;
 using Microsoft.SPOT;
+using System.Threading;
 
 namespace Technobotts.Soccer
 {
@@ -41,6 +42,7 @@ namespace Technobotts.Soccer
 						Utilities.SystemTime.Update();
 						robot.ShowDiagnostics();
 						ActivePeriodic();
+						Thread.Sleep(1);
 					}
 
 				}

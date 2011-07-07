@@ -10,7 +10,7 @@ namespace Technobotts.Robotics.Navigation
 		private PIDController _pid;
 		private IAngleFinder _compass;
 		// the next line is for unsmoothed motors
-		// private readonly double[] pidConstants = new double[3] { 0.5, 1.5, 0.075 };
+		private readonly double[] pidConstants = new double[3] { 0.7, 0.5, 0.06 };
 		// the next line is for smoothed motors (we divide I by 6, and multiply D by 6 because it now 
 		// step only a max of .33, however, we calculate this twice as fast (at 40 Hz) as we calculate the 
 		// target: (20 Hz) 3
@@ -24,12 +24,12 @@ namespace Technobotts.Robotics.Navigation
 
 		// original calculated values above... private readonly double[] pidConstants = new double[3] { 0.711, 1.422, .088875 };
 		// private readonly double[] pidConstants = new double[3] { 0.711, 1.422, .088875 };
-		private readonly double[] pidConstants = new double[3] { 0.40, 1.10, .088875 };
+		//private readonly double[] pidConstants = new double[3] { 0.40, 1.10, .088875 };
+		//private readonly double[] pidConstants = new double[3] { 0.6, 1, 0 };
 
 		public ControlledHolonomicDrive(IAngleFinder compass, params Wheel[] wheels) : base(wheels)
 		{
 			_compass = compass;
-
 			_pid = new PIDController(pidConstants)
 			{
 				Input = new PIDController.InputFunction(

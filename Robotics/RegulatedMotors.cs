@@ -9,9 +9,9 @@ namespace Technobotts.Robotics
 	class RegulatedMotor : IMotor
 	{
 		private static Timer _controlLoop;
-		private static double _period = 0.025;
+		private static double _period = 0.05;
 
-		private static double step = 0.33;
+		public double MaxAcceleration = 16;
 
 		private static ArrayList motors = new ArrayList();
 
@@ -45,7 +45,37 @@ namespace Technobotts.Robotics
 		}
 
 		public double Speed { get; set; }
+		public double ActualSpeed { get { return _innerMotor.Speed; } private set { _innerMotor.Speed = value; } }
 		public NeutralMode NeutralMode { get { return _innerMotor.NeutralMode; } set { _innerMotor.NeutralMode = value; } }
+
+		private void updateSpeed()
+		{
+			const double threshold = 0.1;
+
+			//Going fast forward
+			if (ActualSpeed > threshold)
+			{
+				if (Speed > threshold)
+					ActualSpeed = Speed;
+				else
+					ActualSpeed = threshold;
+			}
+
+			//Going fast backward
+			else if (ActualSpeed < -threshold)
+			{
+				if (Speed < -threshold)
+					ActualSpeed = Speed;
+				else
+					ActualSpeed = -threshold;
+			}
+
+			else
+			{
+				Range allowableChange = new Range(MaxAcceleration * _period);
+				ActualSpeed += allowableChange.Clip(Speed - ActualSpeed);
+			}
+		}
 
 		private static void updateMotors(object o)
 		{
@@ -53,12 +83,7 @@ namespace Technobotts.Robotics
 			{
 				foreach (RegulatedMotor m in motors)
 				{
-					if (m.Speed > m._innerMotor.Speed + step)
-						m._innerMotor.Speed += step;
-					else if (m.Speed < m._innerMotor.Speed - step)
-						m._innerMotor.Speed -= step;
-					else
-						m._innerMotor.Speed = m.Speed;
+					m.updateSpeed();
 				}
 			}
 		}
