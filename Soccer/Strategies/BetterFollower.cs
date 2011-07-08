@@ -19,10 +19,10 @@ namespace Technobotts.Soccer.Strategies
 
 		Distances min = new Distances
 		{
-			Top = 30,
+			Top = 5,
 			Bottom = 20,
-			Left = 10,
-			Right = 10
+			Left = 20,
+			Right = 20
 		};
 
 		public LowPassVectorFilter filter = new LowPassVectorFilter(0.025);
@@ -32,17 +32,71 @@ namespace Technobotts.Soccer.Strategies
 		}
 		public override void ActivePeriodic()
 		{
+			Vector ballDirection = filter.apply(robot.BallDetector.Get());
 			Vector direction;
 
-			if (false && robot.LightGate.IsObstructed)
+			if (ballDirection.Y > 0 && robot.LightGate.IsObstructed)
 			{
 				direction = 800 * Vector.J;
 			}
 			else
 			{
-				direction = 800 * filter.apply(robot.BallDetector.Get());
-				direction = new Vector(direction.X, direction.Y - MathEx.Abs(direction.X * 0.5));
+				direction = 800 * new Vector(ballDirection.X, ballDirection.Y - MathEx.Abs(ballDirection.X * 0.5));
 			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			Distances actual = robot.Sensors.USDistances;
 			Distances delta = actual - min;
 
@@ -51,12 +105,12 @@ namespace Technobotts.Soccer.Strategies
 			if (direction.Y > 0 && delta.Top < 0)
 				direction = new Vector(direction.X, p * delta.Top);
 			else if (direction.Y < 0 && delta.Bottom < 0)
-				direction = new Vector(direction.X, p * delta.Bottom);
+				direction = new Vector(direction.X, -p * delta.Bottom);
 			
 			if (direction.X > 0 && delta.Right < 0)
 				direction = new Vector(p * delta.Right, direction.Y);
 			else if (direction.X < 0 && delta.Left < 0)
-				direction = new Vector(p * delta.Right, direction.Y);
+				direction = new Vector(-p * delta.Left, direction.Y);
 			
 			robot.Drive.RotationPoint = 0;
 			robot.Drive.DriveVelocity = direction;
