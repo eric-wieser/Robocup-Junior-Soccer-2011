@@ -43,6 +43,8 @@
     </Compile>
     <Compile Include="MathEx.cs" />
     <Compile Include="Robotics\FieldHeadingFinder.cs" />
+    <Compile Include="Robotics\Navigation\ControlledTwoWheeledDrive.cs" />
+    <Compile Include="Robotics\Navigation\TwoWheeledDrive.cs" />
     <Compile Include="Robotics\RegulatedMotors.cs" />
     <Compile Include="Robotics\USSensorAggregator.cs" />
     <Compile Include="Soccer\Strategies\BetterFollower.cs" />
