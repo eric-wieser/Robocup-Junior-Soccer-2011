@@ -16,7 +16,7 @@ namespace Technobotts.Tests
 
 		public static void Main()
 		{
-
+			/*
 			InputPort button = new InputPort((Cpu.Pin)FEZ_Pin.Digital.LDR, true, Port.ResistorMode.PullUp);
 			OutputPort solenoid = new OutputPort((Cpu.Pin)FEZ_Pin.Digital.Di20, false);
 			OutputPort led = new OutputPort((Cpu.Pin)FEZ_Pin.Digital.LED, false);
@@ -33,7 +33,7 @@ namespace Technobotts.Tests
 					Thread.Sleep(500);
 					led.Write(false);
 				}
-			}
+			}*/
 
 		}
 	}

@@ -15,17 +15,15 @@ namespace Technobotts.Tests
 		public static void Main()
 		{
 			Soccer.Robot r = new Soccer.Robot();
-			double i = 0;
-			double step = System.Math.PI / 16;
 
 			r.Button.WaitForPress();
-
-			while (true)
-			{
-				r.MotorA.Speed = MathEx.Sin(i);
-				i += step;
-				Thread.Sleep(50);
-			}
+			r.MotorA.Speed = 1;
+			Thread.Sleep(1000);
+			r.MotorB.Speed = 1;
+			Thread.Sleep(1000);
+			r.MotorC.Speed = 1;
+			Thread.Sleep(1000);
+			r.Dispose();
 		}
 	}
 }

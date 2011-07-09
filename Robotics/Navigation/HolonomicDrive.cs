@@ -29,13 +29,13 @@ namespace Technobotts.Robotics.Navigation
 
 			public double TargetSpeed { get; set; }
 
-			//private Vector v;
+			private Vector v;
 			public Vector TargetVector
 			{
-				//get { return v; }
+				get { return v; }
 				set
 				{
-					//v = value;
+					v = value;
 					Vector wheelVector = TransformMatrix.Inverse * value;
 					TargetSpeed = wheelVector.X;
 				}
@@ -81,16 +81,17 @@ namespace Technobotts.Robotics.Navigation
 		protected void update()
 		{
 			foreach (Wheel wheel in Wheels)
-			{
-				wheel.TargetVector = DriveVelocity + (wheel.Position - RotationPoint).Perpendicular * TurnVelocity;
-			}
+				wheel.TargetVector = DriveVelocity;
 
 			normalize();
 
 			foreach (Wheel wheel in Wheels)
-			{
+				wheel.TargetVector += (wheel.Position - RotationPoint).Perpendicular * TurnVelocity;
+
+			normalize();
+
+			foreach (Wheel wheel in Wheels)
 				wheel.Update();
-			}
 		}
 
 		protected void normalize(bool scale = false)
@@ -110,7 +111,7 @@ namespace Technobotts.Robotics.Navigation
 			{
 				double speedRatio = Wheel.MaxSpeed / maxInputSpeed;
 				foreach (Wheel wheel in Wheels)
-					wheel.TargetSpeed *= speedRatio;
+					wheel.TargetVector *= speedRatio;
 			}
 		}
 

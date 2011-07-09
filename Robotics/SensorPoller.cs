@@ -3,6 +3,7 @@ using Microsoft.SPOT;
 using GHIElectronics.NETMF.FEZ;
 using GHIElectronics.NETMF.Native;
 using Microsoft.SPOT.Hardware;
+using Technobotts.Utilities;
 
 namespace Technobotts.Robotics
 {
@@ -98,11 +99,20 @@ namespace Technobotts.Robotics
 
 		public void Poll()
 		{
+			int[] distances = new int[4];
 			_dataProcedure.InvokeEx(_dataBuffer);
 			for (int i = 0; i < IR.Length; i++)
 				((NativeIRSensor) IR[i]).Intensity = _dataBuffer[i];
 			for (int i = 0; i < US.Length; i++)
 				((NativeUSSensor)US[i]).DistanceCM = _dataBuffer[i + IR.Length];
+
+			USDistances = new Distances
+			{
+				Top = US[0].DistanceCM,
+				Right = US[1].DistanceCM,
+				Bottom = US[2].DistanceCM,
+				Left = US[3].DistanceCM,
+			};
 		}
 
 		public int BrokenIRSensorCount
@@ -115,6 +125,24 @@ namespace Technobotts.Robotics
 				return i;
 			}
 		}
+
+        public string BrokenIRSensors
+        {
+            get
+            {
+				string s = "";
+				string sep = "";
+                for (int i = 0; i < IR.Length; i++)
+					if (IR[i].Intensity == 0)
+					{
+						s += sep + i;
+						sep = ",";
+					}
+                return s;
+            }
+        }
+
+		public Distances USDistances { get; private set; }
 
 		public void Dispose()
 		{

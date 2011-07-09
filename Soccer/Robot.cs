@@ -22,9 +22,10 @@ namespace Technobotts.Soccer
 		public IMotor MotorC;
 
 		public ControlledHolonomicDrive Drive;
+		public HolonomicDrive OldDrive;
 		public Solenoid Kicker;
 		public Button Button;
-		public IAngleFinder Compass;
+		public FieldHeadingFinder Compass;
 		public LightGate LightGate;
 
 		public SensorPoller Sensors;
@@ -79,10 +80,31 @@ namespace Technobotts.Soccer
 			Matrix wheelMatrix = new Matrix(-60 * Math.PI, 0, 0, 12 * Math.PI);
 			Vector wheelPosition = Vector.J * 95;
 
-			Compass = new HMC6352();
-			Compass = new FieldHeadingFinder(Compass);
+			Compass = new FieldHeadingFinder(new HMC6352());
 
 			Drive = new ControlledHolonomicDrive(Compass,
+				new HolonomicDrive.Wheel(
+					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
+					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelMatrix,
+					// MotorA 
+					new RegulatedMotor(MotorA)
+				),
+				new HolonomicDrive.Wheel(
+					Matrix.Rotate180 * wheelPosition,
+					Matrix.Rotate180 * wheelMatrix,
+					// MotorB 
+					new RegulatedMotor(MotorB)
+				),
+				new HolonomicDrive.Wheel(
+					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelPosition,
+					Matrix.FromClockwiseRotation(-Math.PI / 3) * wheelMatrix,
+					//MotorC 
+					new RegulatedMotor(MotorC)
+				)
+			);
+
+#if USEOLDDRIVE
+			OldDrive = new HolonomicDrive(
 				new HolonomicDrive.Wheel(
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelPosition,
 					Matrix.FromClockwiseRotation(Math.PI / 3) * wheelMatrix,
@@ -99,6 +121,7 @@ namespace Technobotts.Soccer
 					MotorC
 				)
 			);
+#endif
 
 			//Kicker = new Solenoid(PWM.Pin.PWM5);
 
@@ -111,20 +134,19 @@ namespace Technobotts.Soccer
 
 			
 			LEDs = new LEDGroup(FEZ_Pin.Digital.An1, FEZ_Pin.Digital.An2, FEZ_Pin.Digital.An3, FEZ_Pin.Digital.An4);
+			RegulatedMotor.EnableRegulatedMotorAlgorithm(true);
 		}
 
 		public void ShowDiagnostics()
 		{
 			int brokenIRCount = Sensors.BrokenIRSensorCount;
 
-			Debug.Print(""+brokenIRCount);
-
 			if (brokenIRCount == 16)
 				LEDs.IRIndicator.State = false;
 			else if (brokenIRCount == 0)
 				LEDs.IRIndicator.State = true;
 			else
-				LEDs.IRIndicator.StartBlinking(500, 1 - brokenIRCount / 16);
+				LEDs.IRIndicator.StartBlinking(500, 1 - brokenIRCount / 16.0);
 
 			LEDs.LaserIndicator.State = LightGate.IsObstructed;
 		}
@@ -133,7 +155,7 @@ namespace Technobotts.Soccer
 		{
 			Drive.Dispose();
 			LightGate.Dispose();
-			Kicker.Dispose();
+//			Kicker.Dispose();
 			Button.Dispose();
 			LightGate.Dispose();
 			Sensors.Dispose();

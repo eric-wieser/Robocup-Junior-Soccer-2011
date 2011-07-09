@@ -17,9 +17,12 @@ namespace Technobotts
 			while (true)
 			{
 				s.Poll();
-				int active = s.BrokenIRSensorCount;
+				string broken = s.BrokenIRSensors;
 
-				Debug.Print("IR Sensors borked: " + active);
+				if (broken != "")
+					Debug.Print("IR Sensors " + broken + " are borked!");
+				else
+					Debug.Print("Working!");
 				Thread.Sleep(100);
 			}
 		}

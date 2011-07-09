@@ -22,7 +22,7 @@ namespace Technobotts.Robotics
 		private OutputPort _dir1;
 		private OutputPort _dir2;
 
-		private const int pwmFrequency = 60;
+		private const int pwmFrequency = 300;
 
 		private double _speed = 0;
 

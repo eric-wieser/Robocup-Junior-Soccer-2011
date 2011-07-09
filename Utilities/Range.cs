@@ -60,6 +60,7 @@ namespace Technobotts.Utilities
 		}
 
 		public static Range operator +(Range r, double d) { return new Range(r.Min + d, r.Max + d); }
+		public static Range operator +(double d, Range r) { return r + d; }
 		public static Range operator -(Range r, double d) { return new Range(r.Min - d, r.Max - d); }
 		public static Range operator *(Range r, double d) { return new Range(r.Min * d, r.Max * d); }
 		public static Range operator /(Range r, double d) { return new Range(r.Min / d, r.Max / d); }

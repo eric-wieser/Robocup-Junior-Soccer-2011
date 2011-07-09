@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Technobotts.Tests.LaserTest</StartupObject>
+    <StartupObject>Technobotts.Soccer.Strategies.BetterFollower</StartupObject>
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
@@ -37,16 +38,20 @@
     <Compile Include="DoubleEx.cs" />
     <Compile Include="Geometry\Matrix.cs" />
     <Compile Include="Geometry\Vector.cs" />
+    <Compile Include="Hardware\TechnobottsRTC.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MathEx.cs" />
+    <Compile Include="Robotics\FieldHeadingFinder.cs" />
+    <Compile Include="Robotics\RegulatedMotors.cs" />
     <Compile Include="Robotics\USSensorAggregator.cs" />
+    <Compile Include="Soccer\Strategies\BetterFollower.cs" />
     <Compile Include="Soccer\Strategies\Goalie.cs" />
     <Compile Include="Hardware\Button.cs" />
-    <Compile Include="Hardware\HiTechnicCompassSensor.cs" />
     <Compile Include="Hardware\HMC6352.cs" />
     <Compile Include="Hardware\I2CException.cs" />
     <Compile Include="Hardware\LED.cs" />
     <Compile Include="Hardware\LightGate.cs" />
-    <Compile Include="Hardware\SyncedUltrasonicSensors.cs" />
-    <Compile Include="Hardware\TechnobottsRTC.cs" />
     <Compile Include="Hardware\UltrasonicSensor2.cs" />
     <Compile Include="IRActuallyPluggedIn.cs" />
     <Compile Include="Tests\LEDTest.cs" />
@@ -67,9 +72,8 @@
     <Compile Include="Hardware\PwmIn.cs" />
     <Compile Include="Robotics\Navigation\ControlledHolonomicDrive.cs" />
     <Compile Include="Robotics\Navigation\HolonomicDrive.cs" />
-    <Compile Include="Robotics\AngleFinder.cs" />
+    <Compile Include="Robotics\IAngleFinder.cs" />
     <Compile Include="Robotics\SensorPoller.cs" />
-    <Compile Include="Robotics\SmoothedMotor.cs" />
     <Compile Include="Robotics\Solenoid.cs" />
     <Compile Include="Soccer\Strategies\FollowBallAndClearWall.cs" />
     <Compile Include="Soccer\Strategy.cs" />
@@ -81,16 +85,19 @@
     <Compile Include="Tests\IRRingTest.cs" />
     <Compile Include="Tests\LaserTest.cs" />
     <Compile Include="Tests\PIDTest.cs" />
+    <Compile Include="Tests\RegulatedMotorTest.cs" />
     <Compile Include="Tests\RTCTest.cs" />
     <Compile Include="Tests\SolenoidTest.cs" />
     <Compile Include="Tests\MotorTest.cs" />
     <Compile Include="Tests\USSensorTest.cs" />
     <Compile Include="Tests\USTest.cs" />
+    <Compile Include="Utilities\Distances.cs" />
     <Compile Include="Utilities\LowPassVectorFilter.cs" />
     <Compile Include="Utilities\LowPassFilter.cs" />
     <Compile Include="Utilities\PIDController.cs" />
     <Compile Include="Utilities\Range.cs" />
     <Compile Include="Utilities\SystemTime.cs" />
+    <Compile Include="Utilities\VectorRange.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -116,6 +123,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Native code\Makefile" />
     <None Include="Native code\RLP_LinkScript.lds" />
     <None Include="Resources\Key.dat" />

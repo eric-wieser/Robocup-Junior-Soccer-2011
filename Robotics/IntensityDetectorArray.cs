@@ -66,7 +66,7 @@ namespace Technobotts.Robotics
 			{
 				sourceDirection += sensor.Intensity;
 			}
-			return sourceDirection == 0 ?  0 : sourceDirection / MathEx.Sqrt(sourceDirection.Length);
+			return sourceDirection.Length > 0 ? sourceDirection.Unit : 0;/// MathEx.Sqrt(sourceDirection.Length) : 0;
 		}
 	}
 }

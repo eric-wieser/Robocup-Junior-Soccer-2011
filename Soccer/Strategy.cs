@@ -1,5 +1,6 @@
 using System;
 using Microsoft.SPOT;
+using System.Threading;
 
 namespace Technobotts.Soccer
 {
@@ -17,10 +18,16 @@ namespace Technobotts.Soccer
 
 		public void Execute()
 		{
+
 			try
 			{
 				while (true)
 				{
+					if (robot.Button.IsPressed)
+					{
+						robot.LEDs.ModeIndicator.StartBlinking(500, .5);
+						while (robot.Button.IsPressed) ;
+					}
 					robot.LEDs.ModeIndicator.StartBlinking(1000, 0.75);
 					Disabled();
 					robot.Drive.Stop();
@@ -40,6 +47,7 @@ namespace Technobotts.Soccer
 						Utilities.SystemTime.Update();
 						robot.ShowDiagnostics();
 						ActivePeriodic();
+						Thread.Sleep(1);
 					}
 
 				}
